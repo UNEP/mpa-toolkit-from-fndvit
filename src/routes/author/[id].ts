@@ -26,7 +26,14 @@ export const get: RequestHandler<{ id: string }> = async ({ params }) => {
           authors: true
         }
       },
-      tags: { include: { tag: true } }
+      tags: {
+        where:{
+          tag: {
+            type: 'TOPIC'
+          },
+        },
+        include: { tag: true }
+      }
     }
   });
 
