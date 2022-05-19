@@ -6,6 +6,7 @@
   export let page: CompletePage & {readTime: number};
 
   const authors = page.chapter.authors.map(a => a.name);
+  const authorsString = authors.length > 1 ? authors.slice(0, -1).join(',') + ' and ' + authors.slice(-1) : authors.toString();
 </script>
 
 <div class="container">
@@ -18,7 +19,7 @@
       {page.title}
     </h1>
     <div class="bottom-section">
-      <div class="authors"><b>{authors.length > 1 ? authors.slice(0, -1).join(',') + ' and ' + authors.slice(-1) : authors.toString()}</b></div>
+      <div class="authors"><b>{authorsString}</b></div>
       <div class="read-time">{page.readTime} min read</div>
     </div>
   </div>
@@ -41,7 +42,7 @@
     height: 200px;
     :global(h1) {
       font-size: 1.5rem;
-      margin: 1px;
+      margin: 0px;
     }
 
   }
