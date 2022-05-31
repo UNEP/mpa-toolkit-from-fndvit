@@ -24,6 +24,7 @@
     use:addFocusClass={f => focused = f}
     use:textOnlyPaste
     on:keypress
+    on:keydown
     on:keypress={handleContentEditableKeyPress}
     contenteditable data-placeholder={placeholder}
     bind:textContent={value} />

@@ -22,6 +22,8 @@
     }
   };
 
+  const cancel = () => value = null;
+
   const parseInput = (value: string) => {
     const [lat, long] = (value ||'').split(/,?\s+/).map(v => parseFloat(v));
     return {lat, long, valid: !isNaN(lat) && !isNaN(long)};
@@ -29,16 +31,21 @@
 
   $: editorState = parseInput(value);
 
-  const onEditorKeyPress = (e: KeyboardEvent) => {
-    if (e.key === "Enter") {
-      save();
-    }
-  };
+  const onEditorKeyDown = (e: KeyboardEvent) => e.key === "Escape" && cancel();
+  const onEditorKeyPress = (e: KeyboardEvent) => e.key === "Enter" && save();
+
+  let focus: () => void = undefined;
+
+  $: {
+    if (value == null) focus = undefined;
+    else if (focus) focus();
+  }
+
 </script>
 
 
 <div class="globe-editor"
-  use:clickOutside={() => value = null}
+  use:clickOutside={cancel}
   on:click={() => value = value ?? `${lat}, ${long}`}
 >
   <GlobeViz {lat} {long} />
@@ -47,7 +54,7 @@
     <div class="globe-edit-icon material-icons">edit</div>
   {:else}
     <div class="globe-editor-entry" class:wiggle={$wiggling}>
-      <EditableText bind:value on:keypress={onEditorKeyPress} editable placeholder="lat, long"/>
+      <EditableText bind:focus bind:value on:keydown={onEditorKeyDown} on:keypress={onEditorKeyPress} editable placeholder="lat, long"/>
       <IconButton icon="done" on:click={save} disabled={!editorState.valid} />
     </div>
   {/if}
