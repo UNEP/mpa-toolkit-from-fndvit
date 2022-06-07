@@ -65,8 +65,9 @@
     <EditableText bind:value={chapter.summary} {editable} placeholder='Summary text...' />
   </div>
 
-  <KeyTakeaways bind:keyTakeaways={chapter.keyTakeaways} {editable}/>
-
+  <div class="key-takeaways">
+    <KeyTakeaways bind:keyTakeaways={chapter.keyTakeaways} {editable} />
+  </div>
 </div>
 
 <style lang="scss">
@@ -113,7 +114,16 @@
       color: #333;
     }
   }
-
+  @media screen and (max-width: 1360px) {
+    .key-takeaways {
+      width: calc(680px);
+    }
+  }
+  @media screen and (max-width: 1150px) {
+    .key-takeaways {
+      width: 100%;
+    }
+  }
   @media screen and (max-width: 768px) {
 
     .meta {

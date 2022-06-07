@@ -68,7 +68,7 @@
   .page-content {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(250px, 300px) minmax(32rem, 40rem) minmax(300px, auto);
+    grid-template-columns: minmax(250px, 500px) minmax(32rem, 40rem) minmax(300px, auto);
     grid-template-areas: "left-margin body right-margin";
     grid-auto-flow: row;
     column-gap: 1.5rem;
@@ -107,6 +107,8 @@
   .lifecycle-container {
     grid-area: right-margin;
     padding-top: 1.5rem;
+    transform: translate(0, -350px);
+    justify-self: flex-start;
     :global(.lifecycle) {
       margin: auto;
       max-width: 300px;
@@ -134,10 +136,14 @@
       }
     }
     .lifecycle-container {
+      transform: translate(0, 0px);
       grid-area: body;
       grid-row: 1;
       :global(.lifecycle) {
         max-width: none;
+        :global(.popup-body){
+          width: 450px;
+        }
       }
     }
   }
@@ -168,6 +174,15 @@
       display: none; //temporary
     }
 
+  }
+  @media (max-width: 540px) {
+    .lifecycle-container{
+      :global(.lifecycle) {
+        :global(.popup-body){
+          width: 320px;
+        }
+      }
+    }
   }
 
 </style>
