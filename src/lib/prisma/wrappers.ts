@@ -309,6 +309,8 @@ export async function createAuthor(author: AuthorRequest) {
     createAuthorQuery
   ]);
 
+  await publishEvent('author-created', { id: _author.id });
+
   return _author;
 }
 
@@ -322,6 +324,8 @@ export async function updateAuthor(id: number, author: AuthorRequest) {
     where: { id },
     data: { name, bio, img },
   });
+
+  await publishEvent('author-updated', { id });
 
   return _author;
 }
@@ -348,6 +352,8 @@ export async function deleteAuthor(id: number) {
   const deleteAuthor = prisma.author.delete({ where: { id } });
 
   await prisma.$transaction([cascade, deleteAuthor]);
+
+  await publishEvent('author-deleted', { id });
 
   return true;
 }
