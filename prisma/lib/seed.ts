@@ -142,11 +142,14 @@ export async function seed(dev: boolean) {
 
   console.log(`Seeding: ${dev ? 'dev' : 'prod'}`);
 
-  const tables = ['search', 'caseStudy', 'chapter', 'tagsOnPages', 'page', 'user', 'tag'];
+  const tables = ['search', 'caseStudy', 'chapter', 'tagsOnPages', 'page', 'user', 'tag', 'componetnsonPageOrdering', 'component', 'pageOrdering'];
   for (const table of tables) {
     console.log(`Clearing table "${table}"...`);
     await prisma[table].deleteMany();
   }
+
+  console.log('Creating page components...');
+  await createPageComponents();
 
   console.log('Creating tags...');
   await createTags();
@@ -207,6 +210,70 @@ async function createRandomPage(userIds: number[], allTags: Tag[]) {
       summary,
       authors: getXRandItems(userIds, Math.ceil(Math.random() * 2)),
       keyTakeaways: Array(Math.floor(Math.random() * 4)).fill(null).map(() => summaryLorem.generateSentences(2))
+    }
+  });
+}
+
+async function createPageComponents() {
+  //create page components
+  await prisma.component.createMany({
+    data: [
+      {
+        id: 1,
+        name: 'MpaManagementLifecycle',
+        component: 'MpaManagementLifecycle',
+      },
+      {
+        id: 2,
+        name: 'LandingCarouselChapters',
+        component: 'LandingCarousel',
+      },
+      {
+        id: 3,
+        name: 'LandingSearchBar',
+        component: 'LandingSearchBar',
+      },
+      {
+        id: 4,
+        name: 'LandingCarouselCaseStudies',
+        component: 'LandingCarousel',
+      },
+      {
+        id: 5,
+        name: 'LandingMadlib',
+        component: 'LandingMadlib',
+      },
+    ]
+  });
+
+  //create a page componenet
+  await prisma.pageOrdering.create({
+    data: {
+      name: 'Landing Page',
+      components: {
+        create: [
+          {
+            componentId: 1,
+            position: 0,
+          },
+          {
+            componentId: 2,
+            position: 1,
+          },
+          {
+            componentId: 3,
+            position: 2,
+          },
+          {
+            componentId: 4,
+            position: 3,
+          },
+          {
+            componentId: 5,
+            position: 4,
+          },
+        ]
+      }
     }
   });
 }

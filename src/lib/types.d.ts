@@ -52,6 +52,13 @@ export type TagRequest = {
   value: string;
 }
 
+export type PageOrderingRequest = {
+  components: {
+    componentId: number;
+    position: number;
+  }[];
+}
+
 // **********************
 //  TOP LEVEL COMPONENTS
 // **********************

@@ -1,4 +1,4 @@
-import type { UserRequest, PageRequest, TagRequest, User, Page, Tag } from "$lib/types";
+import type { UserRequest, PageRequest, TagRequest, User, Page, Tag, PageOrderingRequest } from "$lib/types";
 
 export async function uploadImage(file: File) {
   const formData = new FormData();
@@ -92,6 +92,14 @@ export async function updateTag(id: number, data: TagRequest) {
 export async function deleteTag(id: number) {
   const response = await fetch(`/api/tags/${id}`, {
     method: 'DELETE',
+  });
+  return response.ok;
+}
+
+export async function updatePageOrdering(id: number, data: PageOrderingRequest) {
+  const response = await fetch(`/api/pages/ordering/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data)
   });
   return response.ok;
 }

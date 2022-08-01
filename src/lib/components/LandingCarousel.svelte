@@ -1,3 +1,9 @@
+<script lang="ts" context='module'>
+  export type LandingCarouselData = {
+    pages: SubTypes.Page.ContentCard[];
+    title: string;
+  };
+</script>
 <script lang="ts">
   import type { SubTypes } from "$lib/types";
   import {Splide, SplideSlide} from "@splidejs/svelte-splide";
@@ -5,8 +11,10 @@
   import LandingCarouselCard from './LandingCarouselCard.svelte';
   import { SplideOptions } from '$lib/helpers/splide';
 
-  export let pages: SubTypes.Page.ContentCard[];
-  export let title: string;
+  export let data: LandingCarouselData;
+
+  let pages: SubTypes.Page.ContentCard[] = data.pages;
+  let title: string = data.title;
 
   let currentCard = 0;
   let splide: Splide;

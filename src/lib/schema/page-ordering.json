@@ -1,0 +1,21 @@
+{
+  "$id": "pageOrdering",
+
+  "type": "object",
+  "properties": {
+    "tags": { "type": "array", "items": { "$ref": "#/$defs/components" } }
+  },
+
+
+  "$defs": {
+    "components": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "position": { "type": "integer" }
+      },
+      "required": ["id", "position"],
+      "additionalProperties": false
+    }
+  }
+}

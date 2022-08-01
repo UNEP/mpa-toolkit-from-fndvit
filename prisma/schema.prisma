@@ -105,3 +105,28 @@ model Search {
 
   page     Page     @relation(fields: [pageId], references: [id])
 }
+
+model Component {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  component String 
+  pageOrdering     ComponetnsonPageOrdering[]
+}
+
+model PageOrdering {
+  id       Int            @id @default(autoincrement())
+  name     String         @unique
+  components     ComponetnsonPageOrdering[]
+}
+
+model ComponetnsonPageOrdering {
+  component       Component     @relation(fields: [componentId], references: [id])
+  pageOrdering    PageOrdering  @relation(fields: [pageOrderingId], references: [id])
+  position        Int
+
+  componentId     Int
+  pageOrderingId  Int
+
+  @@id([componentId, pageOrderingId])
+}
+

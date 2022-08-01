@@ -4,6 +4,7 @@ import type { AnyValidateFunction } from "ajv/dist/core";
 import * as schemaPage from "./page.json";
 import * as schemaUser from "./user.json";
 import * as schemaTag from "./tag.json";
+import * as schemaPageOrdering from "./page-ordering.json";
 
 export const ajv = new Ajv({removeAdditional: true});
 
@@ -12,6 +13,7 @@ const log = logger.child({scope: 'validate'});
 ajv.addSchema(schemaPage);
 ajv.addSchema(schemaUser);
 ajv.addSchema(schemaTag);
+ajv.addSchema(schemaPageOrdering);
 
 interface Validate {
   (schema: string, data: unknown): void;

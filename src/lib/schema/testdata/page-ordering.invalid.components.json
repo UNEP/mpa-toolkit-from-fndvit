@@ -1,0 +1,33 @@
+[
+  {
+    "component": "string",
+    "position": 1
+  },
+  {
+    "component": {
+      "componentId": 1
+    },
+    "position": 1
+  },
+  {
+    "position": 1
+  },
+  {
+    "component": {
+      "componentId": "2"
+    },
+    "position": 1
+  },
+  {
+    "component": {
+    },
+    "position": 1
+  },
+  {
+    "componentId": "str",
+    "position": 1
+  },
+  {
+    "componentId": 5
+  }
+]

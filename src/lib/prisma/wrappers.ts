@@ -1,10 +1,10 @@
 import type { Prisma } from "@prisma/client";
 import { error404 } from "$lib/errors";
 import { prisma } from "$lib/prisma";
-import type { PageRequest, SubTypes, UserRequest, TagRequest } from "$lib/types";
+import type { PageRequest, SubTypes, UserRequest, TagRequest, PageOrderingRequest } from "$lib/types";
 import { calcReadTime } from "$lib/readtime";
 import { validate } from "$lib/schema/validation";
-import { pageForContentCard, pageFull } from "./queries";
+import { pageForContentCard, pageFull, pageOrdering } from "./queries";
 import { createLookup, type Expand } from "$lib/helpers/utils";
 import { publishEvent } from "$lib/events";
 
@@ -310,4 +310,23 @@ export async function createTag(tag: TagRequest) {
   await publishEvent('tag-created', { id: _tag.id });
 
   return _tag;
+}
+
+export async function updatePageOrdering(id: number, pageComponents: PageOrderingRequest) {
+
+  validate ('pageOrdering', pageOrdering);
+
+  const _pageOrdering = await prisma.pageOrdering.update({
+    where: { id },
+    data: {
+      components: {
+        deleteMany: { OR: [ { pageOrderingId: { equals: id } }, ] },
+        createMany: {
+          data: pageComponents.components.map(({componentId, position}) => ({ componentId, position }))
+        },
+      }
+   }
+  });
+
+  return _pageOrdering;
 }
