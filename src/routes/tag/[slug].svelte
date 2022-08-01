@@ -12,4 +12,4 @@
 
 </script>
 
-<CollectionPage {pages} title={tag.value} bio={null}/>
+<CollectionPage {pages} title={tag.value} />

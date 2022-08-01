@@ -5,7 +5,7 @@
 
   export let pages: SubTypes.Page.CollectionCard[];
   export let title: string;
-  export let bio: string;
+  export let bio: string = null;
   export let search: string = null;
 
 </script>
