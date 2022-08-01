@@ -8,9 +8,11 @@ export const get: RequestHandler<{slug: string}> = async ({ locals, params: { sl
 
   const pageId = pageProps.body.page.id;
   const pageTags = pageProps.body.page.tags;
+  const pageAuthors = pageProps.body.page.chapter.authors;
 
   locals.cacheKeys.add(`page-${pageId}`);
   pageTags.forEach(tag => locals.cacheKeys.add(`tag-${tag.tag.id}`));
+  pageAuthors.forEach(author => locals.cacheKeys.add(`author-${author.id}`));
 
   return pageProps;
 };

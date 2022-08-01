@@ -10,6 +10,7 @@ export const get: RequestHandler<{ slug: string }> = async ({ locals, url }) => 
 
   locals.cacheKeys.add('pages');
   locals.cacheKeys.add('tags');
+  locals.cacheKeys.add('authors');
 
   return {
     status: 200,

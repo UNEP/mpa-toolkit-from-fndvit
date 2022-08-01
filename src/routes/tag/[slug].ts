@@ -45,6 +45,7 @@ export const get: RequestHandler<{ slug: string }> = async ({ locals, params }) 
 
   pages.map(p => p.tags.map(t => locals.cacheKeys.add(`tag-${t.tag.id}`)));
   locals.cacheKeys.add('pages');
+  locals.cacheKeys.add('authors');
 
   return pages
     ? { body: { pages, tag } }

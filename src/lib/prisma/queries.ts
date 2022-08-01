@@ -108,7 +108,7 @@ export const pageForCollectionCard = validate<Prisma.PageSelect>()({
   chapter: {
     select: {
       authors: {
-        select: { name: true }
+        select: { id: true, name: true }
       }
     }
   },
