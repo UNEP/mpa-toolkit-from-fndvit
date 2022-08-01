@@ -13,4 +13,4 @@
 
 </script>
 
-<CollectionPage {pages} title={search} {search}/>
+<CollectionPage {pages} title={search} {search} bio={null}/>
