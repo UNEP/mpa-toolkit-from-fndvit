@@ -221,27 +221,37 @@ async function createPageComponents() {
       {
         id: 1,
         name: 'MpaManagementLifecycle',
+        icon: 'incomplete_circle',
         component: 'MpaManagementLifecycle',
+        display: 'MPA Management Lifecycle',
       },
       {
         id: 2,
         name: 'LandingCarouselChapters',
+        icon: 'view_carousel',
         component: 'LandingCarousel',
+        display: 'Chapters',
       },
       {
         id: 3,
         name: 'LandingSearchBar',
+        icon: 'search',
         component: 'LandingSearchBar',
+        display: 'Search Bar',
       },
       {
         id: 4,
         name: 'LandingCarouselCaseStudies',
+        icon: 'view_carousel',
         component: 'LandingCarousel',
+        display: 'Case Studies',
       },
       {
         id: 5,
         name: 'LandingMadlib',
+        icon: 'arrow_drop_down_circle',
         component: 'LandingMadlib',
+        display: 'Madlib',
       },
     ]
   });
@@ -249,7 +259,9 @@ async function createPageComponents() {
   //create a page componenet
   await prisma.pageOrdering.create({
     data: {
-      name: 'Landing Page',
+      name: 'landingPage',
+      icon: 'home',
+      display: 'Landing Page',
       components: {
         create: [
           {

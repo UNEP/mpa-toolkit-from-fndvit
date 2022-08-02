@@ -9,7 +9,7 @@ export const get = authMiddleware(
     const {id} = params;
     const pageComponents = await prisma.pageOrdering.findUnique({
       ...pageOrderingComponents,
-      where: { name: "Landing Page" }
+      where: { id: parseInt(id) }
     });
 
     return { body: { id, pageComponents } };

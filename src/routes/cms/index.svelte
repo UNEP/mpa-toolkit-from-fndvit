@@ -24,6 +24,7 @@
 
       {#if $session.user.role == "ADMIN"}
         <a href="cms/users"><span class="material-icons">person</span>Users</a>
+        <a href="cms/pagesOrdering"><span class="material-icons">sort</span>Page Ordering</a>
       {/if}
 
     </div>

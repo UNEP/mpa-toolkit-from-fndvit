@@ -63,6 +63,18 @@ async function purgeTag(id: number): Promise<DistributiveOmit<EventOutput, 'even
     : { status: 'ok' };
 }
 
+async function purgePageOrdering(id: number): Promise<DistributiveOmit<EventOutput, 'event'>> {
+  console.log('purging page-ordering id 👉', id);
+  const response = await purgeSurrogate(`page-ordering-${id}`);
+
+  const errors = [
+    ...(response.status === 'error' ? [response.error] : []),
+  ];
+  return errors.length > 0
+    ? { status: 'error', error: errors }
+    : { status: 'ok' };
+}
+
 async function processEvent(event: Event): Promise<EventOutput> {
   switch (event.type) {
     case 'page-deleted':
@@ -81,6 +93,8 @@ async function processEvent(event: Event): Promise<EventOutput> {
       return { ...await purgeSurrogate('pages'), event };
     case 'tag-created':
       return { ...await purgeSurrogate('tags'), event };
+    case 'page-ordering-updated':
+      return { ...await purgePageOrdering(event.details.id), event };
     default:
       console.error('unknown event type', JSON.stringify(event));
       return {

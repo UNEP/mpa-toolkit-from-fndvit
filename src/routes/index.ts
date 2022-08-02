@@ -19,11 +19,12 @@ export const get: RequestHandler<{ id: string }> = async ({locals}) => {
 
   const pageComponents = await prisma.pageOrdering.findUnique({
     ...pageOrderingComponents,
-    where: { name: "Landing Page" }
+    where: { name: "landingPage" }
   });
 
   locals.cacheKeys.add(`pages`);
   locals.cacheKeys.add(`tags`);
+  locals.cacheKeys.add(`page-ordering-${pageComponents.id}`);
 
   const groups = groupBy(pages, p => p.chapter ? 'chapters' : 'caseStudies');
 

@@ -109,13 +109,17 @@ model Search {
 model Component {
   id        Int         @id @default(autoincrement())
   name      String      @unique
-  component String 
+  icon      String?
+  component String
+  display   String?
   pageOrdering     ComponetnsonPageOrdering[]
 }
 
 model PageOrdering {
   id       Int            @id @default(autoincrement())
   name     String         @unique
+  icon     String?
+  display  String?
   components     ComponetnsonPageOrdering[]
 }
 

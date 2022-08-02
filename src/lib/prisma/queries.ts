@@ -121,16 +121,21 @@ export const pageOrderingComponents = validate<Prisma.PageOrderingSelect>()({
     select: {
       position: true,
       component: true,
+      pageOrdering: true,
     },
     orderBy: {
       position: 'asc'
     }
-  }
+  },
+  id: true,
+  display: true,
 });
 
 export const pageOrdering = validate<Prisma.PageOrderingSelect>()({
   id: true,
   name: true,
+  icon: true,
+  display: true,
 });
 
 export const pageForCmsList = clone(pageForCollectionCard);

@@ -328,5 +328,7 @@ export async function updatePageOrdering(id: number, pageComponents: PageOrderin
    }
   });
 
+  await publishEvent('page-ordering-updated', { id: _pageOrdering.id });
+
   return _pageOrdering;
 }

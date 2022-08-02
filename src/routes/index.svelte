@@ -71,7 +71,7 @@
     </div>
   </div>
 
-  {#each pageComponents.components as component}
+  {#each pageComponents?.components as component}
     <svelte:component this={pageComponentsData[component.component.name]?.component} data={pageComponentsData[component.component.name]?.data}/>
   {/each}
 
