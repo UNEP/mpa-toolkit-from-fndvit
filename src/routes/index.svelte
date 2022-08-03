@@ -19,7 +19,7 @@
 </script>
 
 <svelte:head>
-  <title>MPA Toolkit</title>
+  <title>MPAth → Marine solutions hub</title>
 </svelte:head>
 
 <div class="landing-page">
