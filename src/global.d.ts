@@ -10,7 +10,6 @@ declare namespace App {
       id: number;
       email: string;
       name: string;
-      img: string;
       role: 'ADMIN' | 'USER' | 'CONTENT_MANAGER';
     }
   }

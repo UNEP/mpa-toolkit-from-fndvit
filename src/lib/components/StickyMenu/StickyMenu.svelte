@@ -55,11 +55,12 @@
     padding-top: 31px;
     padding-bottom: 29px;
     max-height: 70vh;
-    overflow-y: scroll;
+    overflow-y: none;
+    width: 189px;
   }
   .menuoption {
     typography: ui-small;
-    padding: 10px 40px 0px 28px;
+    padding: 10px 30px 0px 30px;
     cursor: pointer;
     &:hover {
       font-weight: 500;

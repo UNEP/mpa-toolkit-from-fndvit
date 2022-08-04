@@ -44,7 +44,7 @@
   </div>
 
   <div class="filters">
-    <Filters tags={allTags} bind:activeTags {pageSearch}/>
+    <Filters tags={allTags} bind:activeTags bind:pageSearch/>
   </div>
 
   <div class="pages">

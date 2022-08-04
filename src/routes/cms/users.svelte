@@ -2,35 +2,36 @@
 
   import { session } from "$app/stores";
   import { updateUser, deleteUser } from "$lib/api";
-  import EditableUserImage from "$lib/components/cms/EditableUserImage.svelte";
   import { getToaster } from "$lib/helpers/utils";
   import type { User, Role, SubTypes } from "$lib/types";
-  import NewUser from "$lib/components/NewUser.svelte";
-  import DeleteModal from '$lib/components/cms/DeleteModal.svelte';
-  import { openModal } from 'svelte-modals';
 
-  export let users: SubTypes.User.ForCMS[];
+  export let users: SubTypes.User.Session[];
 
   const toaster = getToaster();
-  let newUser: Pick<SubTypes.User.ForCMS, 'id' | 'name' | 'email' | 'role'>;
 
-  const sortUsers = () => {
-    users = users.sort((a, b) => {
-      if (a.role === b.role) return a.id > b.id ? 1 : -1;
-      else return a.role > b.role ? 1 : -1;
-    });
-  };
+  async function onChangeRole(user: SubTypes.User.Session, role: string) {
+    try {
+      await updateUser(user.id, {role: role as User['role']});
+      toaster('User role updated', {type: 'done'});
 
-  sortUsers();
+    } catch (err) {
+      console.error(err);
+      toaster(`Error updating user role: ${err.message}`, {type: 'error'});
+    }
+  }
 
-  const handleAdd = async () => {
-    users.push({ ...newUser, img: null, chapter: [] });
-    sortUsers();
-    newUser = undefined;
-  };
+  async function onChangeName(user: SubTypes.User.Session, name: string) {
+    try {
+      await updateUser(user.id, { name });
+      toaster('User name updated', {type: 'done'});
 
-  const handleDelete = async (user: SubTypes.User.ForCMS) => {
+    } catch (err) {
+      console.error(err);
+      toaster(`Error updating user name: ${err.message}`, {type: 'error'});
+    }
+  }
 
+  async function onClickDeleteUser(user: SubTypes.User.Session) {
     try {
       await deleteUser(user.id);
       toaster('User deleted', {type: 'done'});
@@ -42,52 +43,6 @@
     users = users.filter(row => row != user);
   };
 
-  async function onChangeRole(user: SubTypes.User.ForCMS, role: string) {
-    try {
-      await updateUser(user.id, {role: role as User['role']});
-      toaster('User role updated', {type: 'done'});
-
-    } catch (err) {
-      console.error(err);
-      toaster(`Error updating user role: ${err.message}`, {type: 'error'});
-    }
-  }
-
-  async function onChangeName(user: SubTypes.User.ForCMS, name: string) {
-    try {
-      await updateUser(user.id, { name });
-      toaster('User name updated', {type: 'done'});
-
-    } catch (err) {
-      console.error(err);
-      toaster(`Error updating user name: ${err.message}`, {type: 'error'});
-    }
-  }
-
-  async function onClickDeleteUser(user: SubTypes.User.ForCMS) {
-
-    if (user.chapter.length == 0) {
-      await handleDelete(user);
-    }
-    else {
-      openModal(DeleteModal, {
-        title: 'Delete User',
-        message:
-          'This user is an author on some pages. Are you sure you want to delete it?',
-        confirmText: user.name,
-        onYes: () => handleDelete(user),
-      });
-    }
-  };
-
-  async function createNewUser() {
-    newUser = { id: undefined, name: undefined, email: undefined, role: undefined };
-    openModal(NewUser, {
-      user: newUser,
-      onAdd: () => handleAdd()
-    });
-  };
-
   const roles: Role[] = ["ADMIN", "CONTENT_MANAGER", "USER"];
 
 </script>
@@ -95,22 +50,12 @@
 <div class="container">
 
   <div class="title">
-    <a href="/cms">
-      <span class="material-icons arrow">navigate_before</span>
-    </a>
+    <a href="/cms"><span class="material-icons arrow">navigate_before</span></a>
     <h1>Users</h1>
-
-    <button on:click={() => createNewUser()} class="new-user">
-      <span class="material-icons">person</span>
-      <p>NEW USER</p>
-    </button>
   </div>
 
   <div class="users">
     {#each users as user (user.id)}
-      <div>
-        <EditableUserImage bind:user={user} />
-      </div>
       <div data-id={user.id}>
         <input type="text" value={user.name} on:change={ evt => onChangeName(user, evt.currentTarget.value)}/>
       </div>
@@ -135,7 +80,6 @@
           <div class="material-icons">delete</div>
         </button>
       </div>
-
     {/each}
   </div>
 </div>
@@ -154,7 +98,7 @@
     typography: ui;
     display: grid;
     font-size: 20px;
-    grid-template-columns: 100px 1.25fr 1.25fr 1.25fr 0.25fr;
+    grid-template-columns: 1.25fr 1.25fr 1.25fr 0.25fr;
     row-gap: 30px;
 
     > * {
@@ -217,35 +161,6 @@
     .arrow {
      color: black;
      font-size: 32px;
-    }
-
-    .new-user {
-      text-align: center;
-      background: white;
-      border: none;
-      border-radius: 24px;
-      box-shadow: 0px 1px 16px rgba(0, 0, 0, 0.1);
-      width: 200px;
-      height: 140px;
-
-      position: absolute;
-      right: 100px;
-      margin-top: 80px;
-
-      p {
-        margin: 0;
-        typography: h4-light;
-        color: black;
-      }
-
-      &:hover{
-        background: $colors.neutral-light;
-      }
-
-      .material-icons {
-        margin-top: 15px;
-        font-size: 77px;
-      }
     }
   }
 </style>

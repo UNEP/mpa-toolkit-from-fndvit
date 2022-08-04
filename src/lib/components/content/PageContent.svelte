@@ -9,7 +9,6 @@
   import ContentMadLib from "$lib/components/Madlib/ContentMadLib.svelte";
   import ContentCarousel from "$lib/components/content/ContentCarousel.svelte";
   import Image from "./Image.svelte";
-  import LifeCycle from "../LifeCycle.svelte";
 
   export let page: SubTypes.Page.Full;
   export let recommendedPages: SubTypes.Page.ContentCard[] = null;
@@ -37,11 +36,6 @@
         </svg>
       </div>
     </div>
-  </div>
-  <div class="lifecycle-container">
-    {#if page.caseStudy }
-      <LifeCycle tags={page.tags}/>
-      {/if}
   </div>
   <div class="body-column">
     {#each sections as section, i}
@@ -170,21 +164,6 @@
       width: 18px;
       svg {
         width: 6px;
-      }
-    }
-  }
-
-  .lifecycle-container {
-    grid-area: lifecycle;
-
-    :global(.lifecycle) {
-      margin: 1rem auto 0;
-      // margin: 1rem 0 0 1rem;
-      max-width: 300px;
-      position: relative;
-      z-index: 1;
-      +breakpoint(page, medium) {
-        max-width: none;
       }
     }
   }

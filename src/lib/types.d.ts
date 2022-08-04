@@ -12,11 +12,15 @@ export interface UserInfo {
   id: number;
   email: string;
   name: string;
-  img: string;
 }
 
 export type MilestonesData = {
   [year: string]: string[];
+}
+
+export type KeyLearningsData = {
+  subject: string,
+  body: string[]
 }
 
 // *******************
@@ -25,9 +29,12 @@ export type MilestonesData = {
 
 export type UserRequest = {
   role?: Role;
-  img?: string;
+}
+
+export type AuthorRequest = {
   name?: string;
-  email?: string;
+  bio?: string;
+  img?: string;
 }
 
 export type PageRequest = {

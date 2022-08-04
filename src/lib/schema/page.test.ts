@@ -21,6 +21,7 @@ describe("Page", () => {
     expect(ajv.getSchema('page#/$defs/caseStudy')).toBeTruthy();
     expect(ajv.getSchema('page#/$defs/tag')).toBeTruthy();
     expect(ajv.getSchema('page#/$defs/milestones')).toBeTruthy();
+    expect(ajv.getSchema('page#/$defs/keyLearnings')).toBeTruthy();
   });
 
   test("valid chapter", () => {

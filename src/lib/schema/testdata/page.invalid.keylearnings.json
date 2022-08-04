@@ -1,0 +1,18 @@
+[
+  {
+    "subject": "12352343",
+    "body": [ "a", "b" ]
+  },
+  {
+    "subject": "What's wrong",
+    "body": ["a", 5]
+  },
+  {
+    "subject": "What is needed",
+    "body": []
+  },
+  {
+    "subject": "What works",
+    "body": ["error"]
+  }
+]

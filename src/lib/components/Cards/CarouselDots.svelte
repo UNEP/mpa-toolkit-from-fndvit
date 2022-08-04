@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     padding: 10px 30px;
-    column-gap: 4px;
+    column-gap: 7px;
   }
 
 </style>

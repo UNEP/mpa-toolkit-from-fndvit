@@ -1,11 +1,11 @@
 <script lang="ts">
   import PageEditor from "$lib/components/cms/PageEditor.svelte";
   import { createEmptyPage } from "$lib/helpers/content";
-  import type { Tag, UserInfo } from "$lib/types";
+  import type { Tag, SubTypes } from "$lib/types";
 
-  export let users: UserInfo[];
+  export let authors: SubTypes.Author[];
   export let allTags: Tag[];
   const page = createEmptyPage('caseStudy');
 </script>
 
-<PageEditor {users} {allTags} {page} />
+<PageEditor {authors} {allTags} {page} />

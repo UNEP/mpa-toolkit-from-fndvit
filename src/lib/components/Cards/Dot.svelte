@@ -17,7 +17,7 @@
 
   $defaults = {
     color: black,
-    size: 10px,
+    size: 7px,
     progress-duration: 10s,
     fade: 0.25
   };

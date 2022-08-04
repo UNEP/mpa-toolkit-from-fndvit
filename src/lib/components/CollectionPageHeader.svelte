@@ -5,6 +5,7 @@
 
   export let title: string;
   export let search: string;
+  export let bio: string;
 
   let focusSearch: () => void;
 
@@ -22,6 +23,11 @@
       <Searchbar type={'collection'} bind:focus={focusSearch} />
     </div>
   </div>
+  {#if bio != null}
+    <div class="biography">
+      <p>{bio}</p>
+    </div>
+  {/if}
 </div>
 
 <style lang="stylus">
@@ -52,6 +58,14 @@
     flex: 1;
     min-width: 500px;
     max-width: 700px;
+  }
+  .biography {
+    p {
+      color: #ffffff;
+      max-width: 825px;
+      padding: 40px var(--page-padding);
+    }
+    background-color: alpha($colors.primary-blue, 0.7)
   }
   .unep-logo {
     position: absolute;

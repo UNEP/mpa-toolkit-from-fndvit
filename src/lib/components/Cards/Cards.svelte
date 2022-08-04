@@ -23,6 +23,9 @@
   export let editable = false;
   export let fixedTitle: string = null;
   export let selected = false;
+  export let progress = true;
+  export let canToggleHeading = true;
+  export let removable = true;
 
   let splide: Splide;
 
@@ -56,6 +59,7 @@
 <div class="cards"
   class:has-fixed-title={fixedTitle}
   data-card-style={style}
+  multiple-slides={cards.length > 1}
   class:selected>
 
   <Splide {options} bind:this={splide} on:move={e => currentPageIndex = e.detail.index} hasTrack={false}>
@@ -67,7 +71,7 @@
     <SplideTrack>
       {#each cards as card, i}
         <SplideSlide>
-          <div class="slide">
+          <div class="slide" class:no-heading={style==='no-heading'}>
             {#if style !== 'no-heading'}
               <CardHeading bind:text={card.heading} editable={editable && currentPageIndex === i} />
             {/if}
@@ -79,16 +83,18 @@
     {#if editable}
       <div class="editor-buttons">
         <IconButton icon="add" on:click={onClickAddCard} />
-        <IconButton icon="delete" on:click={onClickRemoveCard} />
-        <IconButton icon="title" active={style === 'default'} on:click={onClickChangeType} />
+        <IconButton icon="delete" on:click={onClickRemoveCard} disabled={!removable && cards.length === 1} />
+        {#if canToggleHeading}
+          <IconButton icon="title" active={style === 'default'} on:click={onClickChangeType} />
+        {/if}
       </div>
     {/if}
     {#if editable || cards.length > 1}
-      <div class="carousel-dots">
+      <div class="carousel-dots card-bottom">
         <CarouselDots
           bind:currentPageIndex
           pagesCount={cards.length}
-          progress={!editable}
+          progress={!editable && progress}
         />
       </div>
     {/if}
@@ -106,8 +112,9 @@
 
   .cards {
     --content-padding: 30px;
+    --content-right-padding: 30px;
     --content-top-padding: 30px;
-    --scrollbar-width: 10px;
+    --scrollbar-width: 5px;
     border-radius: 20px;
     box-shadow: 0px 3px 16px rgba(0, 0, 0, 0.15);
     color: black;
@@ -134,7 +141,8 @@
       --gradient-color: var(--card-color);
     }
 
-    :global(.key-takeaways) & {
+    :global(.key-takeaways) &,
+    :global(.landing-lifecycle) & {
       card-styles($colors.highlight-1)
     }
 
@@ -143,6 +151,11 @@
       card-styles($colors.primary-blue);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+    }
+
+    :global(.key-learnings .card-content) & {
+      card-styles($colors.neutral-bg);
+      box-shadow: none;
     }
   }
 
@@ -171,20 +184,20 @@
   .slide {
     overflow: hidden;
     top: 0;
-    padding: var(--content-top-padding) var(--content-padding) 10px;
+    padding: var(--content-top-padding) var(--content-right-padding) 10px var(--content-padding);
     margin-bottom: 15px;
 
-    .cards[data-card-style="no-heading"] & {
-      padding-right: 140px;
+    .cards[data-card-style="no-heading"][multiple-slides=true] & {
+      --content-right-padding: 140px;
     }
 
     .has-fixed-title & :global(.heading) {
       visibility: hidden;
     }
+
     :global(.heading) {
       max-width: 60%;
     }
-
   }
 
   .fixed-title {
@@ -196,10 +209,6 @@
   }
 
   @media(max-width: 425px) {
-
-    .slide {
-      padding: 1rem;
-    }
 
     .cards {
       :global(.splide__arrows) {
@@ -214,12 +223,6 @@
 
       :global(.carousel-dots) {
         --dot-size: 7px;
-      }
-    }
-
-    .fixed-title {
-      :global(.heading) {
-        margin-left: 17px;
       }
     }
   }

@@ -1,4 +1,4 @@
-import type { ContentDocument, MilestonesData } from "$lib/types";
+import type { ContentDocument, KeyLearningsData, MilestonesData } from "$lib/types";
 import type { ExpandRecursively, Exact, Modify, Expand } from "$lib/helpers/utils";
 import { Prisma, TagType } from "@prisma/client";
 import clone from "clone";
@@ -14,26 +14,25 @@ export const pageTag = validate<Prisma.TagsOnPagesSelect>()({
     category: true
 });
 
-export const userBasic = validate<Prisma.UserSelect>()({
+export const author = validate<Prisma.AuthorSelect>()({
   id: true,
   name: true,
-  img: true
+  img: true,
+  bio: true
 });
 
 export const userSession = validate<Prisma.UserSelect>()({
   id: true,
   email: true,
   name: true,
-  img: true,
-  role: true,
+  role: true
 });
 
-export const userForCMS = validate<Prisma.UserSelect>()({
+export const authorForCMS = validate<Prisma.AuthorSelect>()({
   id: true,
-  email: true,
   name: true,
+  bio: true,
   img: true,
-  role: true,
   chapter: {
     select: { pageId: true }
   }
@@ -42,7 +41,7 @@ export const userForCMS = validate<Prisma.UserSelect>()({
 export const chapterForPageHead = validate<Prisma.ChapterSelect>()({
   keyTakeaways: true,
   summary: true,
-  authors: userBasic
+  authors: author
 });
 
 export const caseStudyForPageHead = validate<Prisma.CaseStudySelect>()({
@@ -55,7 +54,8 @@ export const caseStudyForPageHead = validate<Prisma.CaseStudySelect>()({
     budgetLevel: true,
     lat: true,
     long: true,
-    milestones: true
+    milestones: true,
+    keyLearnings: true
 });
 
 export const countTags = validate<Prisma.TagSelect>()({
@@ -143,7 +143,10 @@ pageForCmsList.select.tags.where = undefined;
 
 export namespace User {
   export type Session = Prisma.UserGetPayload<typeof userSession>;
-  export type ForCMS = Prisma.UserGetPayload<typeof userForCMS>
+}
+
+export namespace Author {
+  export type ForCMS = Prisma.AuthorGetPayload<typeof authorForCMS>;
 }
 
 export namespace Chapter {
@@ -165,13 +168,14 @@ export namespace Page {
 export namespace CaseStudy {
   export type PageHead = Modify<
     Prisma.CaseStudyGetPayload<typeof caseStudyForPageHead>,
-    { milestones: MilestonesData }
+    { milestones: MilestonesData, keyLearnings: KeyLearningsData[] }
   >
 }
 
 export type PageTag = Prisma.TagsOnPagesGetPayload<typeof pageTag>;
 
 export type Tag = Prisma.TagGetPayload<typeof tag>;
+export type Author = Prisma.AuthorGetPayload<typeof author>;
 
 export namespace Tag{
   export type WithPageCount = Prisma.TagGetPayload<typeof countTags>;

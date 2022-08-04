@@ -38,13 +38,17 @@
 
   .content {
     typography: summary-card-body;
-    margin-top: 2rem;
+    margin-top: 15px;
     overflow: auto;
     min-height: 50px;
     max-height: 170px;
 
+    :global(.no-heading) & {
+      margin-top: 0px;
+    }
+
     &::-webkit-scrollbar {
-      width: 5px;
+      width: var(--scrollbar-width);
     }
 
     &::-webkit-scrollbar-track {
@@ -69,32 +73,13 @@
   .gradient::before {
     content: '';
     position: absolute;
-    width: calc((100%) - var(--scrollbar-width) - var(--content-padding) - 18px);
-    height: 75%;
+    width: calc((100%) - var(--content-padding) - var(--content-right-padding) - var(--scrollbar-width));
+    height: 76%;
     left: inherit;
     z-index: 10;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, var(--gradient-color) 80%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, var(--gradient-color) 95%);
     transition: all 2s;
     pointer-events: none;
-  }
-
-  ::-webkit-scrollbar {
-    width: var(--scrollbar-width);
-    cursor: pointer;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: $colors.neutral-bg;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-
-  +breakpoint(page, small) {
-    .content {
-      margin-top: 1.5rem;
-    }
   }
 
 </style>

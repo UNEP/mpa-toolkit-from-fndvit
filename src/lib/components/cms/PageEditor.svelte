@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageRequest, SubTypes, Tag, UserInfo } from '$lib/types';
+  import type { PageRequest, SubTypes, Tag, Author } from '$lib/types';
   import type Toaster from '$lib/components/generic/Toaster.svelte';
   import LifeCycle from '$lib/components/LifeCycle.svelte';
   import { openModal } from 'svelte-modals';
@@ -10,8 +10,8 @@
   import { createPage, deletePage, updatePage, uploadImage } from '$lib/api';
   import LoadingButton from '$lib/components/generic/LoadingButton.svelte';
   import Button from '$lib/components/generic/Button.svelte';
-  import CaseStudyMeta from '$lib/components/head/CaseStudyMeta.svelte';
-  import ChapterMeta from '$lib/components/head/ChapterMeta.svelte';
+  import CaseStudyHead from '$lib/components/head/CaseStudyHead.svelte';
+  import ChapterHead from '$lib/components/head/ChapterHead.svelte';
   import PageSplash from '$lib/components/head/PageSplash.svelte';
   import clone from 'clone';
   import { compareDeep, createLookup, insertInTextArea, slugify, Unpacked } from '$lib/helpers/utils';
@@ -21,16 +21,16 @@
   import { getPageTypeStr } from '$lib/helpers/content';
   import { page as pageStore } from '$app/stores';
 
-  export let users: UserInfo[];
+  export let authors: SubTypes.Author[];
   export let allTags: Tag[];
   export let page: SubTypes.Page.Full;
 
-  setContext('allUsers', users);
+  setContext('allAuthors', authors);
 
   const { protocol, hostname, port } = $pageStore.url;
   const URL_PREFIX = `${protocol}//${hostname}${port ? `:${port}` : ''}/`;
 
-  const userLookup = createLookup(users, u => u.id.toString(), u => u);
+  const authorLookup = createLookup(authors, a => a.id.toString(), u => u);
   const tagLookup = createLookup(allTags, t => t.id.toString(), t => t);
 
   const pageId = page.id;
@@ -127,7 +127,7 @@
     _page.slug = pageType === 'Case Study' ? slugify(_page.caseStudy.name) : slugify(_page.title);
   }
 
-  $: sharedFieldsComplete = _page.title && _page.slug;
+  $: sharedFieldsComplete = !!(_page.title && _page.slug);
 
   $: disabled = saving || deleting;
 
@@ -146,7 +146,7 @@
     })),
     chapter: !_page.chapter ? undefined : {
       ..._page.chapter,
-      authors: _page.chapter.authors.map<UserInfo>(a => userLookup[a.toString()]),
+      authors: _page.chapter.authors.map<Author>(a => authorLookup[a.toString()]),
     }
   };
 
@@ -177,9 +177,9 @@
 
     <PageSplash bind:page={_page} editable={!preview} />
     {#if pageType === "Case Study"}
-      <CaseStudyMeta bind:caseStudy={_page.caseStudy} editable={!preview} />
+      <CaseStudyHead bind:caseStudy={_page.caseStudy} editable={!preview} tags={page.tags} />
     {:else}
-      <ChapterMeta bind:chapter editable={!preview} tags={page.tags} />
+      <ChapterHead bind:chapter editable={!preview} tags={page.tags} />
     {/if}
 
   </div>

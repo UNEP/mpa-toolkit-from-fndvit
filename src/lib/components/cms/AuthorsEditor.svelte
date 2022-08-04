@@ -1,14 +1,12 @@
 <script lang="ts">
-  import type { UserInfo } from '$lib/types';
   import MultiSelect from "svelte-multiselect";
+  import type { Author, SubTypes } from "$lib/types";
   import { getContext } from "svelte";
 
-  type Author = Pick<UserInfo, 'id' | 'name' | 'img'>;
-
-  export let authors: Author[] = [];
+  export let authors: SubTypes.Chapter.PageHead['authors'] = [];
   export let disabled = false;
 
-  const allAuthors = getContext<Author[]>('allUsers');
+  const allAuthors = getContext<Author[]>('allAuthors');
   const allAuthorOptions = allAuthors.map(u => ({
     value: u.id,
     label: u.name,
@@ -46,6 +44,9 @@
     :global(div.multiselect > ul.selected > li) {
       font-size: 16px;
       font-weight: 700;
+    }
+    :global(div.multiselect) {
+      z-index: authors-list;
     }
   }
 

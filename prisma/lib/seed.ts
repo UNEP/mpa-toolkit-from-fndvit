@@ -1,9 +1,10 @@
 import type { ContentBlock, ContentDocument, PageRequest, ParagraphBlock } from '../../src/lib/types';
 import { Tag, TagCategory } from '@prisma/client';
-import { Role, TagType } from '@prisma/client';
+import { TagType } from '@prisma/client';
 import content from './data/content.json';
 import tags from './data/tags.json';
 import milestones from './data/milestones.json';
+import keyLearnings from './data/keyLearnings.json';
 import { LoremIpsum } from "lorem-ipsum";
 import SeedRandom from 'seedrandom';
 import { prisma } from '../../src/lib/prisma';
@@ -81,16 +82,15 @@ export async function createTags() {
 async function createDevData() {
   const names = [ "Emma Doyle", "Nicolas Smith", "Kirby Heath", "Todd Frey", "Del Robertson" ];
 
-  await prisma.user.createMany({
-    data: names.map((name, i) => ({
-      email: `user${i}@example.com`,
+  await prisma.author.createMany({
+    data: names.map(name => ({
       name,
-      role: Role.CONTENT_MANAGER
+      bio: summaryLorem.generateParagraphs(1),
     }))
   });
 
-  const users = await prisma.user.findMany();
-  const userIds = users.map(user => user.id);
+  const authors = await prisma.author.findMany();
+  const authorIds = authors.map(a => a.id);
 
   const allTags = await prisma.tag.findMany();
 
@@ -108,7 +108,7 @@ async function createDevData() {
         summaryLorem.generateSentences(2),
       ],
       summary: "The blue economy is the use of marine resources for sustainable economic development while improving livelihoods, creating jobs, and protecting and supporting marine ecosystems. Find out how to leverage this for your MPA.",
-      authors: [userIds[0]]
+      authors: [authorIds[0]]
     }
   });
 
@@ -129,12 +129,13 @@ async function createDevData() {
         budgetLevel: "Between basic (IDR 13-14 billion ~ US$950,000) and optimal (IDR 30 billion ~ US$2.1 million)",
         lat: -0.23333324,
         long: 130.51666646,
-        milestones
+        milestones,
+        keyLearnings
       }
   });
 
   for (let i = 0; i < NUM_RANDOM_CHAPTERS; i++) {
-    await createRandomPage(userIds, allTags);
+    await createRandomPage(authorIds, allTags);
   }
 }
 
@@ -182,7 +183,7 @@ function getRandomTagsForContent(allTags: Tag[]): PageRequest['tags'] {
   ];
 }
 
-async function createRandomPage(userIds: number[], allTags: Tag[]) {
+async function createRandomPage(authorIds: number[], allTags: Tag[]) {
   const title = titleLorem.generateSentences(1);
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40);
   const summary = summaryLorem.generateParagraphs(1);
@@ -204,11 +205,15 @@ async function createRandomPage(userIds: number[], allTags: Tag[]) {
       budgetLevel: "" ,
       lat: rand() * 180 - 90,
       long: rand() * 360 - 180,
-      milestones: {'2000': [titleLorem.generateSentences(1)]}
+      milestones: {'2000': [titleLorem.generateSentences(1)]},
+      keyLearnings: [
+        { subject: "What works", body: [titleLorem.generateSentences(1), titleLorem.generateSentences(1), titleLorem.generateSentences(1)] },
+        { subject: "What doesn't work", body: [titleLorem.generateSentences(1), titleLorem.generateSentences(1), titleLorem.generateSentences(1)] }
+      ]
     },
     chapter: pageType !== 'chapter' ? undefined : {
       summary,
-      authors: getXRandItems(userIds, Math.ceil(Math.random() * 2)),
+      authors: getXRandItems(authorIds, Math.ceil(Math.random() * 2)),
       keyTakeaways: Array(Math.floor(Math.random() * 4)).fill(null).map(() => summaryLorem.generateSentences(2))
     }
   });

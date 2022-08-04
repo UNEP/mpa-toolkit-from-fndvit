@@ -17,34 +17,41 @@ enum Role {
   ADMIN
 }
 
+model Author {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  bio       String?
+  img       String?
+  chapter   Chapter[]
+}
+
 model User {
   id        Int     @id @default(autoincrement())
   email     String?  @unique
   name      String?
   googleId  String? @unique
   role      Role    @default(USER)
-  chapter   Chapter[]
-  img       String?
 }
 
 model CaseStudy {
-  name        String
-  established Int?
-  size        Float?
-  governance  String
-  staff       String
-  budget      String
-  budgetLevel String
-  lat         Float?
-  long        Float?
-  milestones  Json
-  page        Page   @relation(fields: [pageId], references: [id])
-  pageId      Int    @id
+  name          String
+  established   Int?
+  size          Float?
+  governance    String
+  staff         String
+  budget        String
+  budgetLevel   String
+  lat           Float?
+  long          Float?
+  milestones    Json
+  keyLearnings  Json
+  page          Page   @relation(fields: [pageId], references: [id])
+  pageId        Int    @id
 }
 
 model Chapter {
   summary      String
-  authors      User[]
+  authors      Author[]
   keyTakeaways String[]
   page         Page     @relation(fields: [pageId], references: [id])
   pageId       Int      @id

@@ -1,4 +1,4 @@
-import type { UserRequest, PageRequest, TagRequest, User, Page, Tag, PageOrderingRequest } from "$lib/types";
+import type { UserRequest, PageRequest, TagRequest, AuthorRequest, User, Page, Tag, Author, PageOrderingRequest } from "$lib/types";
 
 export async function uploadImage(file: File) {
   const formData = new FormData();
@@ -27,16 +27,31 @@ export async function deleteUser(id: number) {
   return response.ok;
 }
 
-export async function createUser(data: UserRequest) {
-  const response = await fetch('/api/users/create', {
+export async function updateAuthor(id: number, data: AuthorRequest) {
+  const response = await fetch(`/api/authors/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data)
+  });
+  const author = await response.json() as Author;
+  return author;
+}
+
+export async function deleteAuthor(id: number) {
+  const response = await fetch(`/api/authors/${id}`, {
+    method: 'DELETE',
+  });
+  return response.ok;
+}
+
+export async function createAuthor(data: AuthorRequest) {
+  const response = await fetch('/api/authors/create', {
     method: 'PUT',
     body: JSON.stringify(data)
   });
 
-  const user = await response.json() as User;
-  return user;
+  const author = await response.json() as Author;
+  return author;
 }
-
 
 async function _page(data: PageRequest, id?: number) {
   const newPage = id === undefined;

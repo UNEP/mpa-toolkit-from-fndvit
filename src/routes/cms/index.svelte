@@ -5,7 +5,7 @@
 
 <div class="cms-homepage">
 
-  {#if $session.user === undefined}
+  {#if $session.user == null}
 
     <h2>WELCOME</h2>
 
@@ -21,6 +21,7 @@
 
       <a href="cms/pages"><span class="material-icons">description</span>Pages</a>
       <a href="cms/tags"><span class="material-icons">sell</span>Tags</a>
+      <a href="cms/authors"><span class="material-icons">face</span>Authors</a>
 
       {#if $session.user.role == "ADMIN"}
         <a href="cms/users"><span class="material-icons">person</span>Users</a>

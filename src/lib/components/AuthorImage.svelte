@@ -1,15 +1,15 @@
 <script lang="ts">
-  import type { User } from "$lib/types";
+  import type { Author } from "$lib/types";
   import { staticUrl } from "$lib/helpers/content";
   import userNoProfileImage from '$lib/assets/default-profile-img.png';
 
-  export let user: Pick<User, 'img' | 'name'>;
+  export let author: Pick<Author, 'img' | 'name'>;
 
-  $: src = user.img ? staticUrl(user.img) : userNoProfileImage;
+  $: src = author.img ? staticUrl(author.img) : userNoProfileImage;
 
 </script>
 
-<img class="user-image" on:click {src} alt={user.name} />
+<img class="user-image" on:click {src} alt={author.name} />
 
 <style lang="stylus">
   img {

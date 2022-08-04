@@ -5,6 +5,7 @@ import * as schemaPage from "./page.json";
 import * as schemaUser from "./user.json";
 import * as schemaTag from "./tag.json";
 import * as schemaPageOrdering from "./page-ordering.json";
+import * as schemaAuthor from "./author.json";
 
 export const ajv = new Ajv({removeAdditional: true});
 
@@ -14,6 +15,7 @@ ajv.addSchema(schemaPage);
 ajv.addSchema(schemaUser);
 ajv.addSchema(schemaTag);
 ajv.addSchema(schemaPageOrdering);
+ajv.addSchema(schemaAuthor);
 
 interface Validate {
   (schema: string, data: unknown): void;

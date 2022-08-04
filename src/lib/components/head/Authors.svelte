@@ -1,15 +1,10 @@
 <script lang="ts">
   import type { SubTypes } from "$lib/types";
   import AuthorsEditor from "../cms/AuthorsEditor.svelte";
-  import UserImage from "../UserImage.svelte";
+  import AuthorImage from "../AuthorImage.svelte";
 
   export let authors: SubTypes.Chapter.PageHead['authors'];
   export let editable = false;
-
-  function onClickAuthor(i: number) {
-    authors = [...authors];
-    authors.splice(i, 1);
-  }
 
   const emptyAuthors = [{ id: 0, name: 'Author', img: '' }];
 
@@ -18,12 +13,12 @@
 </script>
 
 <div class="author-images">
-  {#each displayAuthors as user}
-    <UserImage {user} />
+  {#each displayAuthors as author}
+    <AuthorImage {author} />
   {/each}
 </div>
 
-    {#if editable}
+  {#if editable}
     <div class="author-editor">
       <AuthorsEditor bind:authors={authors} />
     </div>
@@ -33,7 +28,7 @@
         {#if i > 0 && i === displayAuthors.length - 1}
           and
         {/if}
-        <div on:click={() => editable && onClickAuthor(i)}>{author.name}</div>
+        <a href="/author/{author.id}" rel="external">{author.name}</a>
       {/each}
     </div>
   {/if}
@@ -51,6 +46,11 @@
     display: flex;
     align-items: center;
     column-gap: 5px;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
 
   .author-editor {

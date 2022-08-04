@@ -1,0 +1,19 @@
+{
+  "$id": "author",
+
+  "type": "object",
+  "properties": {
+
+    "name": { "type": "string", "minLength": 2, "maxLength": 30},
+    "bio": {
+      "oneOf": [
+        { "type": "string", "maxLength": 700 },
+        { "type": "null" }
+      ]
+    },
+    "img": { "type": "string" }
+
+  },
+  "additionalProperties": false,
+  "minProperties": 1
+}
