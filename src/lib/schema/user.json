@@ -3,16 +3,7 @@
 
   "type": "object",
   "properties": {
-
-    "role": { "type": "string", "enum": [ "USER", "CONTENT_MANAGER", "ADMIN" ] },
-    "name": { "type": "string", "minLength": 2, "maxLength": 30},
-    "email": {
-      "oneOf": [
-        { "type": "string", "minLength": 5 },
-        { "type": "null" }
-      ]
-    }
-
+    "role": { "type": "string", "enum": [ "USER", "CONTENT_MANAGER", "ADMIN" ] }
   },
   "additionalProperties": false,
   "minProperties": 1

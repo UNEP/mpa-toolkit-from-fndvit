@@ -21,7 +21,7 @@
 
 {#if keyTakeaways.length}
   <div class="key-takeaways">
-    <Cards bind:cards {editable} fixedTitle="Key takeaways" />
+    <Cards bind:cards {editable} canToggleHeading={false} fixedTitle="Key takeaways" />
   </div>
 {:else if editable}
   <div class="add-key-takeaways">

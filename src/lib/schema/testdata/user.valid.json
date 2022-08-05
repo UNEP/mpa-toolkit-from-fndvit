@@ -1,12 +1,5 @@
 [
   {
     "role": "USER"
-  },
-
-  {
-    "email": "a@b.c"
-  },
-  {
-    "email": null
   }
 ]

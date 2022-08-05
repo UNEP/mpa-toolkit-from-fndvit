@@ -4,28 +4,10 @@
   import { updateUser, deleteUser } from "$lib/api";
   import { getToaster } from "$lib/helpers/utils";
   import type { User, Role, SubTypes } from "$lib/types";
-  import NewUser from "$lib/components/NewUser.svelte";
-  import { openModal } from "svelte-modals";
 
   export let users: SubTypes.User.Session[];
 
   const toaster = getToaster();
-  let newUser: SubTypes.User.Session;
-
-  const sortUsers = () => {
-    users = users.sort((a, b) => {
-      if (a.role === b.role) return a.id > b.id ? 1 : -1;
-      else return a.role > b.role ? 1 : -1;
-    });
-  };
-
-  sortUsers();
-
-  const handleAdd = async () => {
-    users.push({ ...newUser});
-    sortUsers();
-    newUser = undefined;
-  };
 
   async function onChangeRole(user: SubTypes.User.Session, role: string) {
     try {
@@ -50,7 +32,6 @@
   }
 
   async function onClickDeleteUser(user: SubTypes.User.Session) {
-
     try {
       await deleteUser(user.id);
       toaster('User deleted', {type: 'done'});
@@ -62,14 +43,6 @@
     users = users.filter(row => row != user);
   };
 
-  async function createNewUser() {
-    newUser = { id: undefined, name: undefined, email: undefined, role: undefined };
-    openModal(NewUser, {
-      user: newUser,
-      onAdd: () => handleAdd()
-    });
-  };
-
   const roles: Role[] = ["ADMIN", "CONTENT_MANAGER", "USER"];
 
 </script>
@@ -79,11 +52,6 @@
   <div class="title">
     <a href="/cms"><span class="material-icons arrow">navigate_before</span></a>
     <h1>Users</h1>
-
-    <button on:click={() => createNewUser()} class="new-user">
-      <span class="material-icons">person</span>
-      <p>NEW USER</p>
-    </button>
   </div>
 
   <div class="users">
@@ -193,35 +161,6 @@
     .arrow {
      color: black;
      font-size: 32px;
-    }
-
-    .new-user {
-      text-align: center;
-      background: white;
-      border: none;
-      border-radius: 24px;
-      box-shadow: 0px 1px 16px rgba(0, 0, 0, 0.1);
-      width: 200px;
-      height: 140px;
-
-      position: absolute;
-      right: 100px;
-      margin-top: 80px;
-
-      p {
-        margin: 0;
-        typography: h4-light;
-        color: black;
-      }
-
-      &:hover{
-        background: $colors.neutral-light;
-      }
-
-      .material-icons {
-        margin-top: 15px;
-        font-size: 77px;
-      }
     }
   }
 </style>

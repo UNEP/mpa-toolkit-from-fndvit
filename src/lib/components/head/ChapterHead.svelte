@@ -22,7 +22,7 @@
 
 </script>
 
-<div class="meta" class:meta-editable={editable} class:has-keytakeaways={hasKeyTakeaways}>
+<div class="chapter-head" class:meta-editable={editable} class:has-keytakeaways={hasKeyTakeaways}>
 
   <div class="byline">
 
@@ -54,15 +54,15 @@
 
 <style lang="stylus">
 
-  .meta:not(.has-keytakeaways) {
+  .chapter-head:not(.has-keytakeaways) {
     grid-config(page, chapter-no-keytakeaways);
   }
 
-  .meta.has-keytakeaways {
+  .chapter-head.has-keytakeaways {
     grid-config(page, chapter);
   }
 
-  .meta {
+  .chapter-head {
     --ui-color-placeholder: #ffffff55;
 
     padding: 2rem 0 0;

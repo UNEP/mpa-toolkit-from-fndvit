@@ -1,4 +1,4 @@
-import type { ContentDocument, MilestonesData } from "$lib/types";
+import type { ContentDocument, KeyLearningsData, MilestonesData } from "$lib/types";
 import type { ExpandRecursively, Exact, Modify, Expand } from "$lib/helpers/utils";
 import { Prisma, TagType } from "@prisma/client";
 import clone from "clone";
@@ -54,7 +54,8 @@ export const caseStudyForPageHead = validate<Prisma.CaseStudySelect>()({
     budgetLevel: true,
     lat: true,
     long: true,
-    milestones: true
+    milestones: true,
+    keyLearnings: true
 });
 
 export const countTags = validate<Prisma.TagSelect>()({
@@ -146,7 +147,7 @@ export namespace Page {
 export namespace CaseStudy {
   export type PageHead = Modify<
     Prisma.CaseStudyGetPayload<typeof caseStudyForPageHead>,
-    { milestones: MilestonesData }
+    { milestones: MilestonesData, keyLearnings: KeyLearningsData[] }
   >
 }
 

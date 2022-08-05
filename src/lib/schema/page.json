@@ -51,6 +51,17 @@
       "additionalProperties": false
     },
 
+    "keyLearnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "string" },
+          "body": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+
     "caseStudy": {
       "type": "object",
       "properties": {
@@ -63,11 +74,12 @@
         "budgetLevel": { "type": "string" },
         "lat": { "type": ["number", "null"] },
         "long": { "type": ["number", "null"] },
-        "milestones": { "$ref": "#/$defs/milestones" }
+        "milestones": { "$ref": "#/$defs/milestones" },
+        "keyLearnings": { "$ref":  "#/$defs/keyLearnings"}
       },
       "required": [
         "name", "established", "size", "governance", "staff",
-        "budget", "budgetLevel", "lat", "long", "milestones"
+        "budget", "budgetLevel", "lat", "long", "milestones", "keyLearnings"
       ],
       "additionalProperties": false
     },

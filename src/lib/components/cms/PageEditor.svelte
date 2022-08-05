@@ -10,8 +10,8 @@
   import { createPage, deletePage, updatePage, uploadImage } from '$lib/api';
   import LoadingButton from '$lib/components/generic/LoadingButton.svelte';
   import Button from '$lib/components/generic/Button.svelte';
-  import CaseStudyMeta from '$lib/components/head/CaseStudyMeta.svelte';
-  import ChapterMeta from '$lib/components/head/ChapterMeta.svelte';
+  import CaseStudyHead from '$lib/components/head/CaseStudyHead.svelte';
+  import ChapterHead from '$lib/components/head/ChapterHead.svelte';
   import PageSplash from '$lib/components/head/PageSplash.svelte';
   import clone from 'clone';
   import { compareDeep, createLookup, insertInTextArea, slugify, Unpacked } from '$lib/helpers/utils';
@@ -127,7 +127,7 @@
     _page.slug = pageType === 'Case Study' ? slugify(_page.caseStudy.name) : slugify(_page.title);
   }
 
-  $: sharedFieldsComplete = _page.title && _page.slug;
+  $: sharedFieldsComplete = !!(_page.title && _page.slug);
 
   $: disabled = saving || deleting;
 
@@ -177,9 +177,9 @@
 
     <PageSplash bind:page={_page} editable={!preview} />
     {#if pageType === "Case Study"}
-      <CaseStudyMeta bind:caseStudy={_page.caseStudy} editable={!preview} />
+      <CaseStudyHead bind:caseStudy={_page.caseStudy} editable={!preview} tags={page.tags} />
     {:else}
-      <ChapterMeta bind:chapter editable={!preview} tags={page.tags} />
+      <ChapterHead bind:chapter editable={!preview} tags={page.tags} />
     {/if}
 
   </div>

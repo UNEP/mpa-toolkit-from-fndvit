@@ -27,17 +27,6 @@ export async function deleteUser(id: number) {
   return response.ok;
 }
 
-export async function createUser(data: UserRequest) {
-  const response = await fetch('/api/users/create', {
-    method: 'PUT',
-    body: JSON.stringify(data)
-  });
-
-  const user = await response.json() as User;
-  return user;
-}
-
-
 export async function updateAuthor(id: number, data: AuthorRequest) {
   const response = await fetch(`/api/authors/${id}`, {
     method: 'PATCH',

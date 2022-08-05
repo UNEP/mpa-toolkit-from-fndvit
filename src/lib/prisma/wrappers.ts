@@ -188,33 +188,15 @@ export async function searchTags(searchText: string) {
   return o;
 }
 
-export async function createUser(user: UserRequest) {
-
-  validate('user', user);
-
-  const { name, email, role } = user;
-
-  const createUserQuery = prisma.user.create({
-    data: {
-      name, email, role
-    }});
-
-  const [_user] = await prisma.$transaction([
-    createUserQuery
-  ]);
-
-  return _user;
-}
-
 export async function updateUser(id: number, user: UserRequest) {
 
   validate('user', user);
 
-  const { name, email, role } = user;
+  const { role } = user;
 
   const _user = await prisma.user.update({
     where: { id },
-    data: { name, email, role },
+    data: { role },
   });
 
   return _user;

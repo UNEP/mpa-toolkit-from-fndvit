@@ -34,18 +34,19 @@ model User {
 }
 
 model CaseStudy {
-  name        String
-  established Int?
-  size        Float?
-  governance  String
-  staff       String
-  budget      String
-  budgetLevel String
-  lat         Float?
-  long        Float?
-  milestones  Json
-  page        Page   @relation(fields: [pageId], references: [id])
-  pageId      Int    @id
+  name          String
+  established   Int?
+  size          Float?
+  governance    String
+  staff         String
+  budget        String
+  budgetLevel   String
+  lat           Float?
+  long          Float?
+  milestones    Json
+  keyLearnings  Json
+  page          Page   @relation(fields: [pageId], references: [id])
+  pageId        Int    @id
 }
 
 model Chapter {

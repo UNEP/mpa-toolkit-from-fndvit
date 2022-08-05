@@ -18,14 +18,17 @@ export type MilestonesData = {
   [year: string]: string[];
 }
 
+export type KeyLearningsData = {
+  subject: string,
+  body: string[]
+}
+
 // *******************
 // API REQUEST BODIES
 // *******************
 
 export type UserRequest = {
   role?: Role;
-  name?: string;
-  email?: string;
 }
 
 export type AuthorRequest = {
