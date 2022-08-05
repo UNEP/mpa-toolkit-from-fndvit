@@ -9,17 +9,23 @@
   import MpaManagementLifecycle from "$lib/components/MPAManagementLifecycle.svelte";
   import LandingMadlib from "$lib/components/Madlib/LandingMadLib.svelte";
   import InlineSvgLink from "$lib/components/generic/InlineSvgLink.svelte";
+  import Metadata from "./tag/Metadata.svelte";
 
   export let chapters: SubTypes.Page.ContentCard[] = [];
   export let caseStudies: SubTypes.Page.ContentCard[] = [];
   export let tags: SubTypes.Tag[] = [];
 
   const tagsForContainer = tags.map<PageTag>(t => ({tag: t, category: 'PRIMARY'}));
+  const desc = "A brand-new, growing educational platform for the MPA community to share lessons, challenges and sustainable solutions.";
 
 </script>
 
 <svelte:head>
-  <title>MPAth → Marine solutions hub</title>
+  <Metadata
+    type="website"
+    title="Marine solutions hub"
+    {desc}
+  />
 </svelte:head>
 
 <div class="landing-page">
