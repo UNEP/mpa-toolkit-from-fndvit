@@ -116,26 +116,9 @@ export const pageForCollectionCard = validate<Prisma.PageSelect>()({
   caseStudy: { select: { name: true } },
 });
 
-export const pageOrderingComponents = validate<Prisma.PageOrderingSelect>()({
-  components: {
-    select: {
-      position: true,
-      component: true,
-      pageOrdering: true,
-    },
-    orderBy: {
-      position: 'asc'
-    }
-  },
-  id: true,
-  display: true,
-});
-
-export const pageOrdering = validate<Prisma.PageOrderingSelect>()({
-  id: true,
-  name: true,
-  icon: true,
-  display: true,
+export const keyValue = validate<Prisma.KeyValueSelect>()({
+  value: true,
+  key: true
 });
 
 export const pageForCmsList = clone(pageForCollectionCard);
@@ -177,14 +160,12 @@ export type PageTag = Prisma.TagsOnPagesGetPayload<typeof pageTag>;
 export type Tag = Prisma.TagGetPayload<typeof tag>;
 export type Author = Prisma.AuthorGetPayload<typeof author>;
 
+export type KeyValue = Prisma.KeyValueGetPayload<typeof keyValue>;
+
 export namespace Tag{
   export type WithPageCount = Prisma.TagGetPayload<typeof countTags>;
 }
 
-export namespace PageOrdering {
-  export type PageOrdering = Prisma.PageOrderingGetPayload<typeof pageOrdering>;
-  export type PageComponents = Prisma.PageOrderingGetPayload<typeof pageOrderingComponents>;
-}
 // ***********************
 //   Typescript helpers
 // ***********************

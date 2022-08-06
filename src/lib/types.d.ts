@@ -59,12 +59,12 @@ export type TagRequest = {
   value: string;
 }
 
-export type PageOrderingRequest = {
-  components: {
-    componentId: number;
-    position: number;
-  }[];
+export type KeyValueRequest =
+{
+  value: HomepageComponentName[];
 }
+
+export type HomepageComponentName = 'lifecycle' | 'chapters' | 'search' | 'madlib' | 'casestudies';
 
 // **********************
 //  TOP LEVEL COMPONENTS

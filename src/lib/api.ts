@@ -1,4 +1,4 @@
-import type { UserRequest, PageRequest, TagRequest, AuthorRequest, User, Page, Tag, Author, PageOrderingRequest } from "$lib/types";
+import type { UserRequest, PageRequest, TagRequest, AuthorRequest, User, Page, Tag, Author, KeyValueRequest} from "$lib/types";
 
 export async function uploadImage(file: File) {
   const formData = new FormData();
@@ -111,10 +111,13 @@ export async function deleteTag(id: number) {
   return response.ok;
 }
 
-export async function updatePageOrdering(id: number, data: PageOrderingRequest) {
-  const response = await fetch(`/api/pages/ordering/${id}`, {
+export async function updateKeyValue(key: string, data: KeyValueRequest) {
+  const response = await fetch(`/api/keyvalue/${key}`, {
     method: 'PATCH',
     body: JSON.stringify(data)
   });
+  if (!response.ok) {
+    throw new Error('Failed to update key value');
+  }
   return response.ok;
 }

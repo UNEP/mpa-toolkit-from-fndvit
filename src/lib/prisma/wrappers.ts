@@ -1,10 +1,10 @@
 import type { Prisma } from "@prisma/client";
 import { error404 } from "$lib/errors";
 import { prisma } from "$lib/prisma";
-import type { PageRequest, SubTypes, UserRequest, TagRequest, AuthorRequest, PageOrderingRequest } from "$lib/types";
+import type { PageRequest, SubTypes, UserRequest, TagRequest, AuthorRequest, KeyValueRequest } from "$lib/types";
 import { calcReadTime } from "$lib/readtime";
 import { validate } from "$lib/schema/validation";
-import { pageForContentCard, pageFull, pageOrdering } from "./queries";
+import { pageForContentCard, pageFull } from "./queries";
 import { createLookup, type Expand } from "$lib/helpers/utils";
 import { publishEvent } from "$lib/events";
 
@@ -275,25 +275,18 @@ export async function createTag(tag: TagRequest) {
   return _tag;
 }
 
-export async function updatePageOrdering(id: number, pageComponents: PageOrderingRequest) {
+export async function updateKeyValue(key: string, data: KeyValueRequest) {
 
-  validate ('pageOrdering', pageOrdering);
+  validate ('keyValue', {...data, key: key});
 
-  const _pageOrdering = await prisma.pageOrdering.update({
-    where: { id },
-    data: {
-      components: {
-        deleteMany: { OR: [ { pageOrderingId: { equals: id } }, ] },
-        createMany: {
-          data: pageComponents.components.map(({componentId, position}) => ({ componentId, position }))
-        },
-      }
-   }
+  const _keyValue = await prisma.keyValue.update({
+    where: { key },
+    data: { value: data.value },
   });
 
-  await publishEvent('page-ordering-updated', { id: _pageOrdering.id });
+  await publishEvent('key-value-updated', { key });
 
-  return _pageOrdering;
+  return _keyValue;
 }
 
 export async function createAuthor(author: AuthorRequest) {

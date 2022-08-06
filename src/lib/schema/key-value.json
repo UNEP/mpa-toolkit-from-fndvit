@@ -1,0 +1,9 @@
+{
+  "$id": "keyValue",
+  "type": "object",
+
+  "properties": {
+    "value": { "type": ["array", "object"] },
+    "key": { "type": "string" }
+  }
+}

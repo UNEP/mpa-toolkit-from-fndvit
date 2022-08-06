@@ -143,14 +143,14 @@ export async function seed(dev: boolean) {
 
   console.log(`Seeding: ${dev ? 'dev' : 'prod'}`);
 
-  const tables = ['search', 'caseStudy', 'chapter', 'tagsOnPages', 'page', 'user', 'tag', 'componetnsonPageOrdering', 'component', 'pageOrdering'];
+  const tables = ['search', 'caseStudy', 'chapter', 'tagsOnPages', 'page', 'user', 'tag', 'keyValue'];
   for (const table of tables) {
     console.log(`Clearing table "${table}"...`);
     await prisma[table].deleteMany();
   }
 
-  console.log('Creating page components...');
-  await createPageComponents();
+  console.log('Creating key values...');
+  await createKeyValues();
 
   console.log('Creating tags...');
   await createTags();
@@ -219,78 +219,11 @@ async function createRandomPage(authorIds: number[], allTags: Tag[]) {
   });
 }
 
-async function createPageComponents() {
+async function createKeyValues() {
   //create page components
-  await prisma.component.createMany({
+  await prisma.keyValue.createMany({
     data: [
-      {
-        id: 1,
-        name: 'MpaManagementLifecycle',
-        icon: 'incomplete_circle',
-        component: 'MpaManagementLifecycle',
-        display: 'MPA Management Lifecycle',
-      },
-      {
-        id: 2,
-        name: 'LandingCarouselChapters',
-        icon: 'view_carousel',
-        component: 'LandingCarousel',
-        display: 'Chapters',
-      },
-      {
-        id: 3,
-        name: 'LandingSearchBar',
-        icon: 'search',
-        component: 'LandingSearchBar',
-        display: 'Search Bar',
-      },
-      {
-        id: 4,
-        name: 'LandingCarouselCaseStudies',
-        icon: 'view_carousel',
-        component: 'LandingCarousel',
-        display: 'Case Studies',
-      },
-      {
-        id: 5,
-        name: 'LandingMadlib',
-        icon: 'arrow_drop_down_circle',
-        component: 'LandingMadlib',
-        display: 'Madlib',
-      },
+      { key: 'landingPage', value: ['lifecycle', 'chapters', 'search', 'madlib', 'casestudies'] },
     ]
-  });
-
-  //create a page componenet
-  await prisma.pageOrdering.create({
-    data: {
-      name: 'landingPage',
-      icon: 'home',
-      display: 'Landing Page',
-      components: {
-        create: [
-          {
-            componentId: 1,
-            position: 0,
-          },
-          {
-            componentId: 2,
-            position: 1,
-          },
-          {
-            componentId: 3,
-            position: 2,
-          },
-          {
-            componentId: 4,
-            position: 3,
-          },
-          {
-            componentId: 5,
-            position: 4,
-          },
-        ]
-      }
-    }
   });
 }

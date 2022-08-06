@@ -1,48 +1,23 @@
 <script lang="ts">
-  import type { SubTypes } from "$lib/types";
+  import type { HomepageComponentName, SubTypes } from "$lib/types";
   import type { PageTag } from "$lib/prisma/queries";
   import LandingCarousel from "$lib/components/LandingCarousel.svelte";
   import Searchbar from "$lib/components/generic/Searchbar.svelte";
   import Footer from "$lib/components/Footer.svelte";
+  import TagContainer from "$lib/components/TagContainer.svelte";
   import landingSplash from '$lib/assets/landing-splash.jpg';
   import MpaManagementLifecycle from "$lib/components/MPAManagementLifecycle.svelte";
   import LandingMadlib from "$lib/components/Madlib/LandingMadLib.svelte";
   import InlineSvgLink from "$lib/components/generic/InlineSvgLink.svelte";
-  import LandingSearchBar from "$lib/components/LandingSearchBar.svelte";
 
   export let chapters: SubTypes.Page.ContentCard[] = [];
   export let caseStudies: SubTypes.Page.ContentCard[] = [];
   export let tags: SubTypes.Tag[] = [];
-  export let pageComponents: SubTypes.PageOrdering.PageComponents = null;
+  export let componentsOrder: HomepageComponentName[] = ['lifecycle', 'chapters', 'search', 'madlib', 'casestudies'];
 
-  let pageComponentsData = {
-    "MpaManagementLifecycle": {
-      data: null,
-      component: MpaManagementLifecycle
-    },
-    "LandingCarouselChapters": {
-      data: {
-        pages: chapters,
-        title: "Chapters"
-      },
-      component: LandingCarousel
-    },
-    "LandingCarouselCaseStudies": {
-      data: {
-        pages: caseStudies,
-        title: "Case Studies"
-      },
-      component: LandingCarousel
-    },
-    "LandingMadlib": {
-      data: null,
-      component: LandingMadlib
-    },
-    "LandingSearchBar": {
-      data: tags.map<PageTag>(t => ({tag: t, category: 'PRIMARY'})),
-      component: LandingSearchBar
-    },
-  }
+  const getComponentOrder = (name: HomepageComponentName): number => componentsOrder.indexOf(name);
+
+  const tagsForContainer = tags.map<PageTag>(t => ({tag: t, category: 'PRIMARY'}));
 
 </script>
 
@@ -71,9 +46,28 @@
     </div>
   </div>
 
-  {#each pageComponents?.components as component}
-    <svelte:component this={pageComponentsData[component.component.name]?.component} data={pageComponentsData[component.component.name]?.data}/>
-  {/each}
+  <div class="ordered-components">
+    <div style="order: {getComponentOrder('lifecycle')}">
+      <MpaManagementLifecycle/>
+    </div>
+
+    <div style="order: {getComponentOrder('chapters')}">
+      <LandingCarousel pages={chapters} title="Get the <b>answers</b> to all your questions" />
+    </div>
+
+    <div style="order: {getComponentOrder('search')}" class="ordered-component inline-searchbar">
+      <Searchbar type={'inline'}/>
+      <TagContainer tags={tagsForContainer}/>
+    </div>
+
+    <div style="order: {getComponentOrder('madlib')}">
+      <LandingMadlib />
+    </div>
+
+    <div style="order: {getComponentOrder('casestudies')}">
+      <LandingCarousel pages={caseStudies} title="Explore what <b>others have done</b>" />
+    </div>
+  </div>
 
   <Footer/>
 </div>
@@ -84,6 +78,11 @@
   .landing-page {
     background: $colors.neutral-bg;
     --page-padding: 6rem;
+  }
+
+  .ordered-components {
+    display: flex;
+    flex-direction: column;
   }
 
   .inline-searchbar {

@@ -1,7 +1,7 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { error404 } from "$lib/errors";
 import { prisma } from "$lib/prisma";
-import { pageForContentCard, tag, pageOrderingComponents } from "$lib/prisma/queries";
+import { pageForContentCard, tag, keyValue as KeyValueSelect } from "$lib/prisma/queries";
 import { groupBy } from "$lib/helpers/utils";
 
 export const get: RequestHandler<{ id: string }> = async ({locals}) => {
@@ -17,18 +17,20 @@ export const get: RequestHandler<{ id: string }> = async ({locals}) => {
   });
 
 
-  const pageComponents = await prisma.pageOrdering.findUnique({
-    ...pageOrderingComponents,
-    where: { name: "landingPage" }
+  const keyValue = await prisma.keyValue.findUnique({
+    ...KeyValueSelect,
+    where: { key: "landingPage" }
   });
+
+
 
   locals.cacheKeys.add(`pages`);
   locals.cacheKeys.add(`tags`);
-  locals.cacheKeys.add(`page-ordering-${pageComponents.id}`);
+  locals.cacheKeys.add(`key-value-${keyValue.key}`);
 
   const groups = groupBy(pages, p => p.chapter ? 'chapters' : 'caseStudies');
 
   return pages
-    ? { body: { ...groups, tags, pageComponents } }
+    ? { body: { ...groups, tags, componentsOrder:  keyValue.value} }
     : error404('Page not found');
 };
