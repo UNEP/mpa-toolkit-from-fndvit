@@ -46,8 +46,3 @@
 <meta property="twitter:image" content={metaimg}>
 
 {@html jsonld}
-
-
-
-
-
