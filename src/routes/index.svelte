@@ -23,7 +23,7 @@
 <svelte:head>
   <Metadata
     type="website"
-    title="Marine solutions hub"
+    title="MPAth - Marine solutions hub"
     {desc}
   />
 </svelte:head>
