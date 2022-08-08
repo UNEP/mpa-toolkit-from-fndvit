@@ -1,44 +1,52 @@
 <script lang="ts">
+  import { staticUrl } from "$lib/helpers/content";
 
-  export let title: string = "";
-  export let desc: string = "Description";
-  export let type: string = "";
+  export let title: string;
+  export let desc: string;
+  export let type: string;
   export let slug: string = "";
+  export let image: string = "";
 
-  const schema = {
+  $: metatitle = `MPAth - ${title}`;
+  $: metaurl = `https://mpath.help/` + slug;
+  $: metaimg = staticUrl(image);
+
+  $: schema = {
     "@context": "http://www.schema.org",
     "@type": type === "website" ? "WebSite" : "Article",
-    "name": "MPAth",
-    "url": "https://mpath.help/",
+    "name": metatitle,
+    "url": metaurl,
     "logo": "favicon.ico",
-    "image": "assets/fishing-xl.7d30c137.jpg",
+    "image": metaimg,
     "description": desc
   };
 
-  const jsonld = `<script type="application/ld+json">${JSON.stringify(schema) + "<"}/script>`;
+  $: jsonld = `<script type="application/ld+json">${JSON.stringify(schema) + "<"}/script>`;
 
 </script>
 
 
-  <link rel="canonical" href="https://mpath.help/">
-  <link rel="icon" href="favicon.ico" />
+<link rel="canonical" href={metaurl}>
+<link rel="icon" href="favicon.ico" />
 
-  <title>MPAth - {title}</title>
-  <meta name="title" content="caca">
-  <meta name="description" content={desc} />
+<title>{metatitle}</title>
+<meta name="title" content={metatitle}>
+<meta name="description" content={desc} />
 
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="MPAth">
-  <meta property="og:url" content="https://mpath.help/">
-  <meta property="og:title" content="MPAth - {title}">
-  <meta property="og:description" content={desc}>
+<meta property="og:type" content={type}>
+<meta property="og:site_name" content="MPAth">
+<meta property="og:url" content={metaurl}>
+<meta property="og:title" content={metatitle}>
+<meta property="og:description" content={desc}>
+<meta property="og:image" content={metaimg}>
 
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://mpath.help/">
-  <meta property="twitter:title" content="caca">
-  <meta property="twitter:description" content="caca">
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content={metaurl}>
+<meta property="twitter:title" content={metatitle}>
+<meta property="twitter:description" content={desc}>
+<meta property="twitter:image" content={metaimg}>
 
-  {@html jsonld}
+{@html jsonld}
 
 
 
