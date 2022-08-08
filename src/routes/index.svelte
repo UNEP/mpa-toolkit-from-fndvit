@@ -17,13 +17,14 @@
 
   const tagsForContainer = tags.map<PageTag>(t => ({tag: t, category: 'PRIMARY'}));
   const desc = "A brand-new, growing educational platform for the MPA community to share lessons, challenges and sustainable solutions.";
+  const title = "MPAth - Marine solutions hub";
 
 </script>
 
 <svelte:head>
   <Metadata
     type="website"
-    title="MPAth - Marine solutions hub"
+    {title}
     {desc}
   />
 </svelte:head>
