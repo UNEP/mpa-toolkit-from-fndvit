@@ -6,6 +6,7 @@ import { keymap } from 'prosemirror-keymap';
 import type { Schema } from 'prosemirror-model';
 import { Plugin } from 'prosemirror-state';
 import type { DecorationSet } from 'prosemirror-view';
+import { formattingPlugin } from './formatting';
 import { buildInputRules } from './inputRules';
 import { richTextKeyMapPlugin } from './keymap';
 import { placeholderPlugin } from './placeholder';
@@ -35,6 +36,7 @@ export const plugins = (schema: Schema): Plugin[] => {
     richTextKeyMapPlugin(schema),
     keymap(baseKeymap),
     emptyPlugin,
-    placeholderPlugin
+    placeholderPlugin,
+    formattingPlugin
   ];
 };
