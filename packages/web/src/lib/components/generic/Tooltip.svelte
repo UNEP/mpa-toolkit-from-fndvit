@@ -9,6 +9,7 @@
   .tooltip {
     --arrow-size: 8px;
     position: absolute;
+    z-index: $z-index.tooltip;
     top: calc(100% + var(--arrow-size));
     left: 50%;
     pointer-events: none;
