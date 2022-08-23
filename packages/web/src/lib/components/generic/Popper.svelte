@@ -21,7 +21,7 @@
       const instance = createPopper(el, tooltipEl, {
         placement: 'auto',
         onFirstUpdate: () => (tooltipEl.style.visibility = 'visible'),
-        modifiers: [{ name: 'offset', options: { offset: [0, 8] } }]
+        modifiers: [{ name: 'offset', options: { offset: [0, 12] } }]
       });
       const destroy = () => {
         tooltipEl.style.visibility = 'hidden';
@@ -87,14 +87,14 @@
     }
 
     &:global([data-popper-placement^='left']) > .arrow {
-      right: -4px;
+      right: -8px;
       &:before {
         box-shadow: 1px -1px 2px rgba(0, 0, 0, 0.1);
       }
     }
 
     &:global([data-popper-placement^='right']) > .arrow {
-      left: -4px;
+      left: -8px;
       &:before {
         box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.1);
       }
