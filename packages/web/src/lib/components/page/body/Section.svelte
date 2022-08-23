@@ -5,8 +5,8 @@
 
   let expanded = false;
 
-  const index = section.blocks.findIndex((_, i) => i > 2 && section.blocks[i - 1].type !== 'heading');
-  const hideFrom = index > 3 ? index + 1 : null;
+  const index = section.blocks.findIndex((_, i) => i > 3 && section.blocks[i - 1].type !== 'heading');
+  const hideFrom = index !== -1 ? index + 1 : null;
 </script>
 
 <section
