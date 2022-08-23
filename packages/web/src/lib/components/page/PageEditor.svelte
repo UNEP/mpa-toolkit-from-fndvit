@@ -13,7 +13,7 @@
   import { compareDeep, slugify } from '$lib/utils';
   import { insertInTextArea, onHoverEl } from '$lib/helpers/utils';
   import { getPageTypeStr } from '$lib/helpers/content';
-  import { Button, DeleteModal, IconButton, LoadingButton, Spinner, toaster, Popper } from '$lib/components/generic';
+  import { Button, DeleteModal, IconButton, LoadingButton, Popper, Spinner, toaster } from '$lib/components/generic';
   import * as api from '$lib/api';
   import { page as pageStore } from '$app/stores';
   import { goto } from '$app/navigation';
@@ -339,6 +339,11 @@
       :global(.problem) {
         background-color: #fdd;
         cursor: pointer;
+
+      }
+      :global(.problem-highlight) {
+        // highlight this problem
+        background-color: #faa;
       }
     }
   }

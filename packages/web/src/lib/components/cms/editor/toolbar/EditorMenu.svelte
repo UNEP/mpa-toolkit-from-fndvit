@@ -7,6 +7,7 @@
   import BlockButton from './BlockButton.svelte';
   import ListControls from './ListControls.svelte';
   import ImageButton from './ImageButton.svelte';
+  import Formatting from './Formatting.svelte';
   import { IconButton } from '$lib/components/generic';
   import { schema } from '$lib/editor/schema';
 
@@ -38,6 +39,7 @@
   </div>
 
   <div class="right-section">
+    <Formatting {editorState} />
     <slot name="extra-controls" />
   </div>
 </div>
