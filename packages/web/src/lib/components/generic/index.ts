@@ -7,6 +7,7 @@ export { default as InlineSvg } from './InlineSvg.svelte';
 export { default as InlineSvgLink } from './InlineSvgLink.svelte';
 export { default as LoadingButton } from './LoadingButton.svelte';
 export { default as LocalFileCrop } from './LocalFileCrop.svelte';
+export { default as Popper } from './Popper.svelte';
 export { default as Searchbar } from './Searchbar.svelte';
 export { default as SortableList } from './SortableList.svelte';
 export { default as Spinner } from './Spinner.svelte';

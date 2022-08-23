@@ -50,7 +50,7 @@ function addNodeRule(
 
 function formattingDeco(doc: Node) {
   const decos = checkFormatting(doc).map(prob =>
-    Decoration.inline(prob.from, prob.to, { class: 'problem', 'data-problem-msg': prob.rule.msg })
+    Decoration.inline(prob.from, prob.to, { class: 'problem', 'data-hover-msg': prob.rule.msg })
   );
   return DecorationSet.create(doc, decos);
 }

@@ -77,3 +77,25 @@ export function insertInTextArea(text: string, el: HTMLInputElement) {
   el.setRangeText(text, start, end, 'select');
   el.setSelectionRange(start + text.length, start + text.length);
 }
+
+export const onHoverEl = (node: HTMLElement, [className, cb]: [string, (el: HTMLElement) => void]) => {
+  let problemEl: HTMLElement;
+  node.addEventListener('mouseover', e => {
+    const isProblemEl = e.target instanceof HTMLElement && e.target.className === className;
+    if (isProblemEl) {
+      problemEl = e.target;
+      cb(problemEl);
+    }
+  });
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      m.removedNodes.forEach(n => {
+        if (n === problemEl) {
+          problemEl = null;
+          cb(null);
+        }
+      });
+    });
+  });
+  observer.observe(node, { childList: true, subtree: true });
+};
