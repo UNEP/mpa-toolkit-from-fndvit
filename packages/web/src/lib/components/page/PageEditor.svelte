@@ -339,7 +339,24 @@
       :global(.problem) {
         background-color: #fdd;
         cursor: pointer;
-
+      }
+      :global(.problem[data-problem-name="leading-space"]) {
+        position: relative;
+        display: inline-block;
+        min-width: 5px;
+        &:before {
+          content: 'arrow_right';
+          font-family: 'Material Icons';
+          font-size: 1.25rem;
+          color: #f55;
+          display: block;
+          position: absolute;
+          right: calc(100% + 10px);
+        }
+        &:after {
+          content: ' ';
+          display: inline-block;
+        }
       }
       :global(.problem-highlight) {
         // highlight this problem

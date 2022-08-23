@@ -99,3 +99,12 @@ export const onHoverEl = (node: HTMLElement, [className, cb]: [string, (el: HTML
   });
   observer.observe(node, { childList: true, subtree: true });
 };
+
+export const findAllMatches = (text: string, regex: RegExp) => {
+  const matches: RegExpExecArray[] = [];
+  let match: RegExpExecArray;
+  while ((match = regex.exec(text)) !== null) {
+    matches.push(match);
+  }
+  return matches;
+};
