@@ -5,6 +5,7 @@
   import chapterDefaultImage from '$lib/assets/chapter-default-image.jpg';
   import { EditableText, InlineSvgLink } from '$lib/components/generic';
   import { staticUrl } from '$lib/helpers/content';
+  import { fallbackBackgroundImage } from '$lib/helpers/utils';
 
   type PageForSplash = Modify<Pick<Page, 'title' | 'img'>, { caseStudy?: { name: string } }>;
 
@@ -12,13 +13,17 @@
   export let editable = false;
 
   $: fallbackImg = page.caseStudy ? caseStudyDefaultImage : chapterDefaultImage;
-  $: img = staticUrl(page.img, fallbackImg);
 </script>
 
 <div class="unep-logo">
   <InlineSvgLink href="https://www.unep.org" svg="UNEP" newTab />
 </div>
-<div class="splash" style="background-image: url({img});" class:splash-cs={page.caseStudy}>
+<div
+  class="splash"
+  style="background-image: url({staticUrl(page.img) || fallbackImg});"
+  use:fallbackBackgroundImage={fallbackImg}
+  class:splash-cs={page.caseStudy}
+>
   <h1>
     {#if page.caseStudy}
       <EditableText bind:value={page.caseStudy.name} {editable} placeholder="Project name" />

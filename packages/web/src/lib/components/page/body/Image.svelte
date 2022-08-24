@@ -1,12 +1,14 @@
 <script lang="ts">
   import type { ImageBlock } from '@mpa/db';
   import { staticUrl } from '$lib/helpers/content';
+  import imagePlaceholder from '$lib/assets/image-placeholder.svg';
+  import { fallbackImage } from '$lib/helpers/utils';
 
   export let block: ImageBlock;
 </script>
 
 <div class="image image-{block.attrs.style || 'regular'}">
-  <img src={staticUrl(block.attrs.src)} alt={block.attrs.alt} />
+  <img src={staticUrl(block.attrs.src)} use:fallbackImage={imagePlaceholder} alt={block.attrs.alt} />
 </div>
 
 <style lang="stylus">

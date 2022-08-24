@@ -2,15 +2,24 @@
   import type { Page } from '@mpa/db';
   import { TagContainer } from '$lib/components/shared';
   import { staticUrl } from '$lib/helpers/content';
+  import { fallbackImage } from '$lib/helpers/utils';
+  import caseStudyDefaultImage from '$lib/assets/casestudy-default-image.jpg';
+  import chapterDefaultImage from '$lib/assets/chapter-default-image.jpg';
 
   export let page: Page.ContentCard;
 
   const { slug, img, title, tags } = page;
+  $: fallbackImg = page.chapter ? chapterDefaultImage : caseStudyDefaultImage;
 </script>
 
 <div class="content-carousel-card" tabindex="0">
   <a href={'/' + slug}>
-    <img src={staticUrl(img)} alt="interesting-chapters" href={'/' + slug} />
+    <img
+      use:fallbackImage={fallbackImg}
+      src={staticUrl(img) || fallbackImg}
+      alt="interesting-chapters"
+      href={'/' + slug}
+    />
     <div class="title">{title}</div>
   </a>
 

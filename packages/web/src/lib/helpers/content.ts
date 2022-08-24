@@ -2,7 +2,7 @@ import type { ContentDocument, Page, Section } from '@mpa/db';
 import { slugify } from '$lib/utils';
 import { env } from '$env/dynamic/public';
 
-export const staticUrl = (path: string, fallback = '') => (path ? `${env.PUBLIC_UPLOAD_BASE_URL}${path}` : fallback);
+export const staticUrl = (path: string) => (path ? `${env.PUBLIC_UPLOAD_BASE_URL}${path}` : null);
 
 export function createSections(document: ContentDocument) {
   return document.content.reduce<Section[]>((sections, block, i) => {
