@@ -23,11 +23,11 @@
 
 <div class="chapter-head" class:meta-editable={editable} class:has-keytakeaways={hasKeyTakeaways}>
   <div class="byline">
-    <Authors bind:authors={chapter.authors} {editable} />
-
-    {#if readTime !== undefined}
-      <div class="readtime">{readTime} min read</div>
-    {/if}
+    <Authors bind:authors={chapter.authors} {editable}>
+      {#if readTime !== undefined}
+        <div class="readtime">{readTime} min read</div>
+      {/if}
+    </Authors>
   </div>
 
   <div class="summary">
@@ -117,6 +117,10 @@
       }
     }
 
+  }
+  .readtime{
+    display: inline;
+    font-weight: 300;
   }
 
 </style>

@@ -29,6 +29,11 @@
         and
       {/if}
       <a href="/author/{slugify(author.name)}" rel="external">{author.name}</a>
+      {#if i < displayAuthors.length - 2}
+        ,
+      {:else if i > 0 && i === displayAuthors.length - 1}
+        <slot/>
+      {/if}
     {/each}
   </div>
 {/if}
@@ -43,7 +48,7 @@
 
   .author-names {
     typography: h5;
-    display: flex;
+    display: inline;
     align-items: center;
     column-gap: 5px;
 
