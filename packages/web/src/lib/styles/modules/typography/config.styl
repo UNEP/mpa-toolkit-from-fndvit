@@ -5,6 +5,7 @@ config({
 })
 
 +font-group($family: var(--font-sans-serif))
+  h1-light: 100px 300;
   h1: 68px
   h1-mobile: 48px
   h2: 48px
@@ -31,6 +32,11 @@ config({
   p-large: 28px/42px 400
 
 +responsive-fonts()
+
+  h1-light-responsive
+    default: h1-light
+    small: h1-mobile
+
   h1-responsive
     default: h1
     small: h1-mobile
