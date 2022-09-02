@@ -8,8 +8,10 @@
   import ListControls from './ListControls.svelte';
   import ImageButton from './ImageButton.svelte';
   import Formatting from './Formatting.svelte';
+  import HeadingBlockButton from './HeadingBlockButton.svelte';
   import { IconButton } from '$lib/components/generic';
   import { schema } from '$lib/editor/schema';
+  import { createEmptyDiagram } from '$lib/helpers/content';
 
   export let editorState: EditorState;
 
@@ -19,6 +21,11 @@
     const tr = editorState.tr.replaceSelectionWith(schema.nodes.cards.createAndFill());
     view.dispatch(tr);
   };
+
+  const insertDiagram = () => {
+    const tr = editorState.tr.replaceSelectionWith(schema.nodes.diagram.createAndFill(createEmptyDiagram()));
+    view.dispatch(tr);
+  };
 </script>
 
 <div class="menu-bar">
@@ -26,13 +33,13 @@
     <MarkButton {editorState} markType={schema.marks.strong} icon="format_bold" />
     <MarkButton {editorState} markType={schema.marks.em} icon="format_italic" />
     <MenuSeperator />
-    <BlockButton {editorState} nodeType={schema.nodes.heading} attrs={{ level: 1 }} text="H1" />
-    <BlockButton {editorState} nodeType={schema.nodes.heading} attrs={{ level: 2 }} text="H2" />
+    <HeadingBlockButton {editorState} />
     <BlockButton {editorState} nodeType={schema.nodes.paragraph} text="¶" />
     <MenuSeperator />
     <ListControls {editorState} />
     <MenuSeperator />
     <IconButton on:click={insertCards} icon="library_books" title="Add cards" />
+    <IconButton on:click={insertDiagram} icon="donut_small" title="Add diagram" />
     <MenuSeperator />
     <ImageButton title="Add image" />
     <MenuSeperator />

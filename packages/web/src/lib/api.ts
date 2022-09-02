@@ -5,15 +5,11 @@ import type { GoogleAuthReturnData } from '../routes/api/auth/google/+server';
 const ky = _ky.create({ prefixUrl: '/api', headers: { Accept: 'application/json' } });
 
 export const image = {
-  upload: async (file: File) => {
-    const formData = new FormData();
-    formData.append('image', file);
-    const response = await ky.put('image/upload', {
-      body: formData
-    });
-    const body = (await response.json()) as { path: string };
-    return body.path;
-  }
+  upload: async (file: File) => _upload('image/upload', file)
+};
+
+export const asset = {
+  upload: async (file: File) => _upload('upload', file)
 };
 
 export const user = {
@@ -61,4 +57,14 @@ async function _createUpdate(model: string, json: unknown, id?: number) {
   const url = `${model}/${create ? 'create' : id}`;
   const response = await ky(url, { method, json });
   return response.json();
+}
+
+async function _upload(endpoint: string, file: File) {
+  const formData = new FormData();
+  formData.append('asset', file);
+  const response = await ky.put(endpoint, {
+    body: formData
+  });
+  const body = (await response.json()) as { path: string };
+  return body.path;
 }

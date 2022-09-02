@@ -14,10 +14,10 @@
         'Error updating author'
       );
     }
-  }
+  };
 
-  $: if (author.bio != null) {
-    if (author.bio.length > 700) toaster.info(`The biography can have a maximum of 700 letters only`);
+
+  $: if (author.name != null) {
     if (author.name.length > 30) toaster.info(`The name can have a maximum of 30 letters only`);
   }
 </script>
@@ -32,7 +32,7 @@
     <input type="text" bind:value={author.name} on:change={onChangeAuthor} placeholder="Enter a name..." />
   </div>
   <div>
-    <textarea rows="3" bind:value={author.bio} on:change={onChangeAuthor} placeholder="Enter a biography..." />
+    <textarea rows="4" bind:value={author.bio} on:change={onChangeAuthor} placeholder="Enter a biography..." />
   </div>
 </div>
 

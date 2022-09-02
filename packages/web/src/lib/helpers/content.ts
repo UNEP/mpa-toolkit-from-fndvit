@@ -1,4 +1,4 @@
-import type { ContentDocument, Page, Section } from '@mpa/db';
+import type { ContentBlock, ContentDocument, Page, Section, DiagramData } from '@mpa/db';
 import { slugify } from '$lib/utils';
 import { env } from '$env/dynamic/public';
 
@@ -70,4 +70,35 @@ export function getPageTypeStr(p: Page): string {
     return hasMilestones ? 'casestudy-with-milestones' : 'casestudy';
   } else if (p.chapter) return p.chapter.keyTakeaways ? 'chapter-with-key-takeaways' : 'chapter';
   throw new Error(`Unknown page type`);
+}
+
+export function createEmptyDiagram(): DiagramData {
+  return {
+    layers: [
+      {
+        card: { heading: 'Layer 1', body: 'This is the first layer' },
+        image: { mobile: null, desktop: null }
+      },
+      {
+        card: { heading: 'Layer 2', body: 'This is the second layer' },
+        image: { mobile: null, desktop: null }
+      }
+    ],
+    resources: [],
+    baselayer: { desktop: null, mobile: null },
+    caption: { title: 'Caption', body: 'Description' }
+  };
+}
+
+export function getSectionSize(section: Section): number {
+  // size = a proxy for visual size for inserting dynamic content
+  return section.blocks.map(getBlockSize).reduce((a, b) => a + b, 0);
+}
+
+export function getBlockSize(b: ContentBlock): number {
+  if (b.type === 'paragraph') {
+    return b.content?.reduce((agg, c) => agg + c.text.length, 0);
+  }
+  // TODO: return est sizes of other block types
+  return 0;
 }

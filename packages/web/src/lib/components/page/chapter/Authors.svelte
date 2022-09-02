@@ -9,6 +9,13 @@
 
   const emptyAuthors = [{ id: 0, name: 'Author', img: '' }];
 
+  $: joinStrings = [
+    // the join string to appear after the author name at each index
+    ...Array.from({ length: Math.max(0, authors.length - 2) }, () => ', '),
+    ...(authors.length >= 2 ? [' and '] : []),
+    ''
+  ];
+
   $: displayAuthors = editable && !authors.length ? emptyAuthors : authors;
 </script>
 
@@ -25,14 +32,9 @@
 {:else}
   <div class="author-names">
     {#each displayAuthors as author, i}
+      <a href="/author/{slugify(author.name)}" rel="external">{author.name}</a>{joinStrings[i]}
       {#if i > 0 && i === displayAuthors.length - 1}
-        and
-      {/if}
-      <a href="/author/{slugify(author.name)}" rel="external">{author.name}</a>
-      {#if i < displayAuthors.length - 2}
-        ,
-      {:else if i > 0 && i === displayAuthors.length - 1}
-        <slot/>
+        <slot />
       {/if}
     {/each}
   </div>

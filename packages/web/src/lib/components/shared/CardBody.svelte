@@ -37,11 +37,17 @@
 <style lang="stylus">
 
   .content {
-    typography: summary-card-body;
     margin-top: 15px;
     overflow: auto;
     min-height: 50px;
-    max-height: 170px;
+    max-height: 170px
+
+    typography: summary-card-body;
+
+    :global(.body-column) &,
+    :global(.editor-content) & {
+      typography: content-card-body;
+    }
 
     :global(.no-heading) & {
       margin-top: 0px;

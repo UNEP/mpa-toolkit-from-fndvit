@@ -66,6 +66,23 @@ export const timedBoolean = () => {
   return obj;
 };
 
+export const hoverTimer = (ms: number) => {
+  let timeout: number;
+  const state = writable(false);
+  const obj = {
+    state,
+    enter: () => {
+      state.set(true);
+      window.clearTimeout(timeout);
+    },
+    leave: () => {
+      window.clearTimeout(timeout);
+      timeout = window.setTimeout(() => state.set(false), ms);
+    }
+  };
+  return obj;
+};
+
 export const imgLoadingStatus = (node: HTMLImageElement, cb: (loading: boolean) => void) => {
   node.addEventListener('load', () => cb(false));
   cb(!node.complete);

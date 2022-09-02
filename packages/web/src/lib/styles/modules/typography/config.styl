@@ -10,10 +10,12 @@ config({
   h2: 48px
   h2-mobile: 32px
   h3: 24px 700
+  h3-mobile: 20px 700
   h3-light: 32px
   h4: 20px 700
   h4-light: 24px
   h4-graphic: 20px 700
+  h4-graphic-mobile: 18px 700
   h5: 16px 700
   h5-mobile: 14px/20px 700
   h5-light: 20px
@@ -22,6 +24,7 @@ config({
   ui-small: 12px/18px 400
   ui-large: 20px/40px 400
   p-graphic: 16px/24px 400
+  p-graphic-mobile: 14px/24px 400
   ui-link: 12px/18px 700
 
 +font-group($family: var(--font-serif))
@@ -41,7 +44,7 @@ config({
 
   content-card-body
     default: p-graphic
-    small: p-graphic
+    small: p-graphic-mobile
 
   h3-light-responsive
     default: h3-light
@@ -54,6 +57,14 @@ config({
   h2-responsive
     default: h2
     small: h2-mobile
+
+  h3-responsive
+    default: h3-light
+    small: h3-mobile
+
+  h4-graphic-responsive
+    default: h4-graphic
+    small: h4-graphic-mobile
 
   h4-responsive
     default: h4

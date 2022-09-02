@@ -20,3 +20,5 @@ export function slugify(text: string, maxLen = 40) {
     .replace(/[^a-z0-9]+/g, '-')
     .slice(0, maxLen);
 }
+
+export const BLANK_DATA_GIF = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
