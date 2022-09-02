@@ -3,9 +3,9 @@
   import staticSplash from '$lib/assets/static-splash.png';
   import UpperMenu from "$lib/components/generic/UpperMenu.svelte";
 
-  export let data;
+  export let data: {slug: string};
 
-  const dictionary = {
+  const pages = {
     'privacy-policy': "Privacy policy",
     team: "Team",
     'terms-of-use': "Terms of use",
@@ -21,12 +21,12 @@
         <InlineSvgLink href="/" svg="MPATH_W" />
       </div>
       <div class="right-side">
-        <UpperMenu current={dictionary[data.slug]}/>
+        <UpperMenu current={pages[data.slug]}/>
       </div>
     </div>
 
     <div class="title-container">
-      <h1>{dictionary[data.slug]}</h1>
+      <h1>{pages[data.slug]}</h1>
     </div>
   </div>
 

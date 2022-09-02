@@ -4,38 +4,60 @@
   export let current: string = "Privacy policy";
 
   const options: string[] = ["Team", "Privacy policy", "Terms of use", "Partners", "Sitemap"];
+  let expanded = false;
+
+  const onExpandButtonClicked = () => {
+    expanded = !expanded;
+    document.getElementById('mobile-menu').focus();
+  }
+
+  const onCloseButtonClicked = () => {
+    expanded = !expanded;
+    console.log("ON CLOSE!");
+  }
 
 </script>
 
 <div class="container">
-  {#each options as opt}
-    <a class:selected={current === opt} href="/about/{slugify(opt)}">{opt}</a>
-  {/each}
+  <div class="expand-button" on:click={onExpandButtonClicked}>
+    <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+      <line x1="1" y1="1" x2="19" y2="1" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <line x1="1" y1="8" x2="19" y2="8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <line x1="1" y1="15" x2="19" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div tabindex="0" id="mobile-menu" class="options-container" class:expanded on:blur={onCloseButtonClicked}>
+    {#each options as opt}
+      <a on:click={onCloseButtonClicked} class:selected={current === opt} href="/about/{slugify(opt)}">{opt}</a>
+    {/each}
+  </div>
 </div>
 
 <style lang="stylus">
 
+  .expand-button {
+    display: none;
+  }
+
   .selected {
     color: #2A2A2A;
-    background-color: rgba(255, 255, 255, 0.85);
-    padding-left: 20px;
-    padding-right: 20px;
+    background-color: rgba(249, 249, 249, 0.85);
     border-radius: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
 
   }
 
   .selected:hover {
-    background-color: rgba(255, 255, 255, 0.90);
+    background-color: rgba(249, 249, 249, 0.90);
   }
 
   .selected::after {
     height: 0px;
   }
 
-  .container {
+  .options-container {
     display: flex;
-    gap: 50px;
+    gap: 30px;
     justify-content: flex-end;
   }
 
@@ -47,6 +69,8 @@
     position: relative;
     padding: 0;
     overflow: hidden;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   a::after {
@@ -66,6 +90,46 @@
   a:focus::after {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+  }
+
+//------------------------------------------------------
+
+
+  +breakpoint(page, medium) {
+    .options-container {
+      display: none;
+    }
+
+    .expand-button {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .expanded {
+      width: 50vw;
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      background: #F9F9F9;
+      box-shadow: -5px 0px 15px 1px rgba(0, 0, 0, 0.25);
+      padding: 2.5rem;
+      height: calc(100vh - 5rem);
+    }
+
+    a {
+      color: #2a2a2a
+    }
+
+    .selected {
+      color: #2A2A2A;
+      typography: h4;
+      background-color: #F9F9F9;
+      border-radius: none;
+      box-shadow: none;
+    }
+
   }
 
 </style>
