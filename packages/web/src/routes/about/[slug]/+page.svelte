@@ -5,6 +5,8 @@
 
   export let data: {slug: string};
 
+  let subtitle = "As of August 24, 2022";
+
   const pages = {
     'privacy-policy': "Privacy policy",
     team: "Team",
@@ -27,6 +29,7 @@
 
     <div class="title-container">
       <h1>{pages[data.slug]}</h1>
+      <h4>{subtitle}</h4>
     </div>
   </div>
 
@@ -36,8 +39,14 @@
     h1 {
       typography: h1-light-responsive;
       color: white;
+      margin-bottom: 0.5rem;
     }
-    margin-left: 96px;
+    h4 {
+      typography: h4;
+      color: white;
+      margin-top: 0.5rem;
+    }
+    margin-left: var(--page-padding);
   }
 
   .upper-container {
@@ -50,11 +59,12 @@
     padding: 0rem 0rem 3rem;
     background-size: cover;
     background-position: bottom;
+    --page-padding: 6rem;
   }
 
   .left-side {
     margin: 2.5rem;
-    margin-left: 96px;
+    margin-left: var(--page-padding);
     color: white;
     width: 110px;
     flex: 1;
@@ -62,8 +72,20 @@
 
   .right-side {
     margin: 2.5rem;
-    margin-right: 96px;
+    margin-right: var(--page-padding);
     flex: 1;
+  }
+
+  +breakpoint(page, medium) {
+    .splash {
+      --page-padding: 3rem;
+    }
+  }
+
+  +breakpoint(page, small) {
+    .splash {
+      --page-padding: 1.5rem;
+    }
   }
 
 </style>

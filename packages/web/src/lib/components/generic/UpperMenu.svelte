@@ -6,14 +6,15 @@
   const options: string[] = ["Team", "Privacy policy", "Terms of use", "Partners", "Sitemap"];
   let expanded = false;
 
+  $: stroke = expanded ? "#2A2A2A" : "#FFFFFF";
+
   const onExpandButtonClicked = () => {
     expanded = !expanded;
-    document.getElementById('mobile-menu').focus();
   }
 
   const onCloseButtonClicked = () => {
+    console.log("BLUR");
     expanded = !expanded;
-    console.log("ON CLOSE!");
   }
 
 </script>
@@ -21,12 +22,12 @@
 <div class="container">
   <div class="expand-button" on:click={onExpandButtonClicked}>
     <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-      <line x1="1" y1="1" x2="19" y2="1" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      <line x1="1" y1="8" x2="19" y2="8" stroke="white" stroke-width="2" stroke-linecap="round"/>
-      <line x1="1" y1="15" x2="19" y2="15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <line x1="1" y1="1" x2="19" y2="1" {stroke} stroke-width="2" stroke-linecap="round"/>
+      <line x1="1" y1="8" x2="19" y2="8" {stroke} stroke-width="2" stroke-linecap="round"/>
+      <line x1="1" y1="15" x2="19" y2="15" {stroke} stroke-width="2" stroke-linecap="round"/>
     </svg>
   </div>
-  <div tabindex="0" id="mobile-menu" class="options-container" class:expanded on:blur={onCloseButtonClicked}>
+  <div class="options-container" class:expanded on:blur={onCloseButtonClicked}>
     {#each options as opt}
       <a on:click={onCloseButtonClicked} class:selected={current === opt} href="/about/{slugify(opt)}">{opt}</a>
     {/each}
@@ -92,10 +93,10 @@
     transform: translate3d(0, 0, 0);
   }
 
-//------------------------------------------------------
-
+//--------------------MEDIUM---------------------------
 
   +breakpoint(page, medium) {
+
     .options-container {
       display: none;
     }
@@ -114,8 +115,12 @@
       right: 0px;
       background: #F9F9F9;
       box-shadow: -5px 0px 15px 1px rgba(0, 0, 0, 0.25);
-      padding: 2.5rem;
+      padding: 3rem;
+      padding-left: 1.5rem;
       height: calc(100vh - 5rem);
+      justify-content: flex-start;
+      position: fixed;
+      z-index: 10;
     }
 
     a {
