@@ -8,6 +8,7 @@
   import type { MenuElement } from '$lib/components/shared/CircleMenu.svelte';
   import { CircleMenu, TagContainer } from '$lib/components/shared';
 
+
   export let allTags: Tag[] = null;
   export let tags: PageTag[]; // binding (updated as tags are changed)
   export let editable = false;
@@ -40,18 +41,24 @@
   // used internally to bind to multiselect & keep track of selected tags
   const selectedTagOptions = groupBy(
     tags.map<PageTagOption>(t => ({ value: t.tag.id, label: t.tag.value, tag: t.tag, category: t.category })),
-    t => (t.tag.type === 'STAGE' ? t.category : t.tag.type)
+    t => (t.tag?.type === 'STAGE' ? t.category : t.tag.type)
   );
 
   const allPageTagOptions =
     editable && allTags.map<PageTagOption>(tag => ({ value: tag.id, label: tag.value, tag, category: 'PRIMARY' }));
   const groupedOptions = editable && groupBy(allPageTagOptions, ({ tag }) => tag.type);
 
-  $: selectedStageTagIds = new Set([...tags.filter(({ tag }) => tag.type === 'STAGE').map(({ tag }) => tag.id)]);
+  $: selectedStageTagIds = new Set([...tags.filter(({ tag }) => tag?.type === 'STAGE').map(({ tag }) => tag.id)]);
 
   $: availableStageOptions = editable && groupedOptions.STAGE.filter(({ tag }) => !selectedStageTagIds.has(tag.id));
 
+
+
   $: if (editable) {
+    if(availableStageOptions.length <= 0){
+      selectedTagOptions.PRIMARY = selectedTagOptions.PRIMARY.filter(o  => Object.hasOwn(o, 'tag'));
+      selectedTagOptions.SECONDARY = selectedTagOptions.SECONDARY.filter(o  => Object.hasOwn(o, 'tag'));
+    }
     tags = Object.values(selectedTagOptions)
       .flat()
       .map(o => ({ tag: o.tag, category: o.category }));
@@ -67,7 +74,7 @@
   $: renderTags = !editable && sortAndGroupTags(tags);
 
   $: menuData = LIFECYCLE_CONFIG.map<MenuElement>((percentage, i) => {
-    const category = tags.find(({ tag }) => tag.id === i)?.category;
+    const category = tags.find(({ tag }) => tag?.id === i)?.category;
     return {
       percentage,
       type: category === 'PRIMARY' ? 'main' : category === 'SECONDARY' ? 'secondary' : 'unselected'
@@ -108,13 +115,13 @@
         <div class="subtitle">Primary Tags</div>
         <MultiSelect
           bind:selected={selectedTagOptions.PRIMARY}
-          options={availableStageOptions}
+          options={availableStageOptions.length > 0 ? availableStageOptions : ['No options available']}
           maxSelect={MAX_PRIMARY_TAGS}
         />
         <div class="subtitle">Secondary Tags</div>
         <MultiSelect
           bind:selected={selectedTagOptions.SECONDARY}
-          options={availableStageOptions.map(o => ({ ...o, category: 'SECONDARY' }))}
+          options={availableStageOptions.length > 0 ? availableStageOptions.map(o => ({ ...o, category: 'SECONDARY' })) : ['No options available']}
           maxSelect={MAX_SECONDARY_TAGS}
         />
       {:else}
