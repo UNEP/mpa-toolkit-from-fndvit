@@ -58,13 +58,13 @@
       image: chapterDefaultImage
     },
     'privacy-policy': {
-      title: `MPAth's privacy policy`,
+      title: `MPAth privacy policy`,
       desc: '',
       type: 'WebSite',
       image: chapterDefaultImage
     },
     'terms-of-use': {
-      title: `MPAth's terms of use`,
+      title: `MPAth terms of use`,
       desc: '',
       type: 'WebSite',
       image: chapterDefaultImage
