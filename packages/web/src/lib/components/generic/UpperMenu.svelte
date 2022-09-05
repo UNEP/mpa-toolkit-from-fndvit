@@ -29,7 +29,7 @@
   </div>
   <div class="options-container" class:expanded on:blur={onCloseButtonClicked}>
     {#each options as opt}
-      <a on:click={onCloseButtonClicked} class:selected={current === opt} href="/about/{slugify(opt)}">{opt}</a>
+      <a on:click={onCloseButtonClicked} class:selected={current === opt} href="/{slugify(opt)}">{opt}</a>
     {/each}
   </div>
 </div>
