@@ -4,7 +4,7 @@
   import UpperMenu from "$lib/components/generic/UpperMenu.svelte";
 
   export let page: string;
-  export let subtitle: string = "As of August 24, 2022";
+  export let subtitle: string = null;
 
 </script>
 
@@ -20,7 +20,9 @@
 
     <div class="title-container">
       <h1>{page}</h1>
-      <h4>{subtitle}</h4>
+      {#if subtitle}
+        <h4>{subtitle}</h4>
+      {/if}
     </div>
   </div>
 
