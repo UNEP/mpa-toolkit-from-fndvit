@@ -3,13 +3,16 @@
   import { slugify } from '$lib/utils';
   export let current: string = "Privacy policy";
 
-  const options: string[] = ["Team", "Privacy policy", "Terms of use", "Partners", "Sitemap"];
+  const options: string[] = ["Partners", "Team", "Privacy policy", "Terms of use", "Sitemap"];
+
   let expanded = false;
 
   $: stroke = expanded ? "#2A2A2A" : "#FFFFFF";
 
   const onExpandButtonClicked = () => {
     expanded = !expanded;
+    menu.focus();
+    console.log({menu});
   }
 
   const onCloseButtonClicked = () => {
@@ -17,39 +20,54 @@
     expanded = !expanded;
   }
 
+  let menu: HTMLElement;
+
 </script>
 
 <div class="container">
-  <div class="expand-button" on:click={onExpandButtonClicked}>
-    <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-      <line x1="1" y1="1" x2="19" y2="1" {stroke} stroke-width="2" stroke-linecap="round"/>
-      <line x1="1" y1="8" x2="19" y2="8" {stroke} stroke-width="2" stroke-linecap="round"/>
-      <line x1="1" y1="15" x2="19" y2="15" {stroke} stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  </div>
-  <div class="options-container" class:expanded on:blur={onCloseButtonClicked}>
+  {#if !expanded}
+    <div class="expand-button" on:click={onExpandButtonClicked}>
+      <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+        <line x1="1" y1="1" x2="19" y2="1" {stroke} stroke-width="2" stroke-linecap="round"/>
+        <line x1="1" y1="8" x2="19" y2="8" {stroke} stroke-width="2" stroke-linecap="round"/>
+        <line x1="1" y1="15" x2="19" y2="15" {stroke} stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  {/if}
+
+  <div bind:this={menu} tabindex="0" class="options-container" class:expanded on:mouseleave={onCloseButtonClicked}>
     {#each options as opt}
       <a on:click={onCloseButtonClicked} class:selected={current === opt} href="/{slugify(opt)}">{opt}</a>
     {/each}
+    {#if expanded}
+      <div class="close-button" on:click={onCloseButtonClicked}>
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <path d="M8.9 7.5L14.7 1.7C15.1 1.3 15.1 0.7 14.7 0.3C14.3 -0.1 13.7 -0.1 13.3 0.3L7.5 6.1L1.7 0.3C1.3 -0.1 0.7 -0.1 0.3 0.3C-0.1 0.7 -0.1 1.3 0.3 1.7L6.1 7.5L0.3 13.3C-0.1 13.7 -0.1 14.3 0.3 14.7C0.5 14.9 0.7 15 1 15C1.3 15 1.5 14.9 1.7 14.7L7.5 8.9L13.3 14.7C13.5 14.9 13.8 15 14 15C14.2 15 14.5 14.9 14.7 14.7C15.1 14.3 15.1 13.7 14.7 13.3L8.9 7.5Z" fill="black"/>
+        </svg>
+      </div>
+    {/if}
   </div>
 </div>
 
 <style lang="stylus">
+
+  .close-button {
+    display: none;
+  }
 
   .expand-button {
     display: none;
   }
 
   .selected {
-    color: #2A2A2A;
-    background-color: rgba(249, 249, 249, 0.85);
+    text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.25);
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
-
+    box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.05);
   }
 
   .selected:hover {
-    background-color: rgba(249, 249, 249, 0.90);
+    background-color: rgba(255, 255, 255, 0.25);
   }
 
   .selected::after {
@@ -60,15 +78,15 @@
     display: flex;
     gap: 30px;
     justify-content: flex-end;
+    z-index: 2;
   }
 
   a {
     text-decoration: none;
     typography: ui-large-responsive;
     color: #ffffff;
-    display: block;
-    position: relative;
     padding: 0;
+    position: relative;
     overflow: hidden;
     padding-left: 20px;
     padding-right: 20px;
@@ -101,9 +119,22 @@
       display: none;
     }
 
+    .options-container:focus {
+      background-color: red;
+    }
+
     .expand-button {
       display: flex;
       justify-content: flex-end;
+    }
+
+    .close-button {
+      display: block;
+      position: absolute;
+      top: 3.5rem;
+      right: 3.5rem;
+      z-index: 3;
+      transform: scale(1.25, 1.25);
     }
 
     .expanded {
@@ -120,7 +151,7 @@
       height: calc(100vh - 5rem);
       justify-content: flex-start;
       position: fixed;
-      z-index: 10;
+
     }
 
     a {
@@ -133,8 +164,21 @@
       background-color: #F9F9F9;
       border-radius: none;
       box-shadow: none;
+      text-shadow: none;
     }
 
   }
+
+
+  +breakpoint(page, small) {
+
+    .close-button {
+      top: 3rem;
+      right: 3rem;
+      transform: scale(1, 1);
+    }
+
+  }
+
 
 </style>
