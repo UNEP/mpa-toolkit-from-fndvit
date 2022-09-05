@@ -60,7 +60,7 @@
     margin-left: var(--page-padding);
     color: white;
     width: 110px;
-    flex: 1;
+    flex: 0;
   }
 
   .right-side {
