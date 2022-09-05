@@ -44,6 +44,36 @@
       desc: '',
       type: 'WebSite',
       image: chapterDefaultImage
+    },
+    team: {
+      title: 'MPAth team',
+      desc: '',
+      type: 'WebSite',
+      image: chapterDefaultImage
+    },
+    partners: {
+      title: 'MPAth partners',
+      desc: '',
+      type: 'WebSite',
+      image: chapterDefaultImage
+    },
+    'privacy-policy': {
+      title: `MPAth's privacy policy`,
+      desc: '',
+      type: 'WebSite',
+      image: chapterDefaultImage
+    },
+    'terms-of-use': {
+      title: `MPAth's terms of use`,
+      desc: '',
+      type: 'WebSite',
+      image: chapterDefaultImage
+    },
+    sitemap: {
+      title: `MPAth sitemap`,
+      desc: '',
+      type: 'WebSite',
+      image: chapterDefaultImage
     }
   } as const;
 
