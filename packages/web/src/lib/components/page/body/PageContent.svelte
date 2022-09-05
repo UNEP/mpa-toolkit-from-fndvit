@@ -5,7 +5,7 @@
   import Section from './Section.svelte';
   import Block from './Block.svelte';
   import ContentCarousel from './ContentCarousel.svelte';
-  import { createSections } from '$lib/helpers/content';
+  import { createSections, getSectionSize } from '$lib/helpers/content';
 
   export let page: Page;
   export let recommendedPages: Page.ContentCard[] = null;
@@ -13,6 +13,15 @@
   const sections = createSections(page.content);
 
   const headings = sections.filter(s => s.id);
+
+  const MIN_SIZE_FOR_MADLIB = 475;
+
+  let cumulativeBlockLength = 0;
+
+  const madlibIndex = sections.findIndex(section => {
+    cumulativeBlockLength += getSectionSize(section);
+    return cumulativeBlockLength >= MIN_SIZE_FOR_MADLIB;
+  });
 </script>
 
 <div class="page-content">
@@ -35,7 +44,7 @@
       </Section>
 
       {#if sections.length > 1}
-        {#if i === 0}
+        {#if i === madlibIndex}
           <div class="madlib-container">
             <ContentMadLib />
           </div>

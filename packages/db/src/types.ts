@@ -100,6 +100,31 @@ export type HomepageComponentName = 'lifecycle' | 'chapters' | 'search' | 'madli
 
 export type HomepageComponents = HomepageComponentName[];
 
+export type DiagramImage = {
+  mobile: string;
+  desktop: string;
+};
+
+export type DiagramLayer = {
+  image: DiagramImage;
+  card: CardData;
+};
+
+export type DiagramResource = {
+  label: string;
+  url: string;
+};
+
+export type DiagramData = {
+  baselayer: DiagramImage;
+  layers: DiagramLayer[];
+  caption: {
+    title: string;
+    body: string;
+  };
+  resources: DiagramResource[];
+};
+
 // ***********************
 //   API request bodies
 // ***********************
@@ -167,6 +192,11 @@ export type CardsBlock = {
   };
 };
 
+export type DiagramBlock = {
+  type: 'diagram';
+  attrs: DiagramData;
+};
+
 export type ImageBlock = {
   type: 'image';
   attrs: {
@@ -192,7 +222,14 @@ export type OrderedListBlock = {
   content: ListItemBlock[];
 };
 
-export type ContentBlock = HeadingBlock | ParagraphBlock | CardsBlock | BulletListBlock | OrderedListBlock | ImageBlock;
+export type ContentBlock =
+  | HeadingBlock
+  | ParagraphBlock
+  | CardsBlock
+  | BulletListBlock
+  | OrderedListBlock
+  | ImageBlock
+  | DiagramBlock;
 
 // ***********************
 //          Marks

@@ -123,6 +123,18 @@ export const schema = new ProsemirrorSchema({
     cards: {
       ...svelteSchemaNode('cards', { style: 'default', cards: [{ heading: '', body: '' }] }),
       group: 'block'
+    },
+
+    diagram: {
+      ...svelteSchemaNode('diagram', {
+        layers: [],
+        resources: [],
+        baselayer: { desktop: '', mobile: '' },
+        caption: { title: '', body: '' }
+      }),
+      draggable: false,
+      selectable: false,
+      group: 'block'
     }
   },
   marks: {

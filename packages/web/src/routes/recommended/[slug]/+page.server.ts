@@ -29,7 +29,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
   const ids: number[] = await getTagsIdBySlug(slug);
 
-  if (ids.length === 0) throw error(404, 'Tag not found');
+  if (ids.length === 0) {
+    locals.cacheKeys.add('tags');
+    throw error(404, 'Tag not found');
+  }
 
   const unorderedPages = await db.prisma.page.findMany({
     where: {

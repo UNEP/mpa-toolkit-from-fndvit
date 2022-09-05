@@ -18,7 +18,8 @@
 
   $: authors = page.chapter?.authors?.map(a => a.name);
   $: authorsString =
-    authors && (authors.length > 1 ? `${authors.slice(0, -1).join(',')} and ${authors.slice(-1)}` : authors.toString());
+    authors &&
+    (authors.length > 1 ? `${authors.slice(0, -1).join(', ')} and ${authors.slice(-1)}` : authors.toString());
 
   $: href = cms ? `/cms/pages/${page.id}` : `/${page.slug}`;
   $: fallbackImg = page.chapter ? chapterDefaultImage : caseStudyDefaultImage;

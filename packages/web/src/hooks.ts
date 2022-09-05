@@ -37,12 +37,10 @@ interface CacheHeaders {
 }
 
 function getCacheHeaders(routeId: string, cacheKeys: App.Locals['cacheKeys']): CacheHeaders {
-  if (env.DISABLE_CACHE === 'true') return { 'Cache-Control': PRIVATE_CACHE };
   if (routeId == null) return {};
   return {
-    'Cache-Control': getCacheControl(routeId),
-    'Surrogate-Key': cacheKeys.size > 0 ? Array.from(cacheKeys).join(' ') : undefined,
-    'Surrogate-Control': 'stale-while-revalidate=30, stale-if-error=3600'
+    'Cache-Control': `${getCacheControl(routeId)}, stale-while-revalidate=30, stale-if-error=3600`,
+    'Surrogate-Key': cacheKeys.size > 0 ? Array.from(cacheKeys).join(' ') : undefined
   };
 }
 
@@ -58,11 +56,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   const response = await resolve(event);
 
-  if (response.ok) {
+  if (env.DISABLE_CACHE === 'true' || /^50\d$/.test(response.status.toString())) {
+    response.headers.set('Cache-Control', PRIVATE_CACHE);
+  } else {
     const cacheHeaders = getCacheHeaders(event.routeId!, event.locals.cacheKeys);
     for (const [key, value] of Object.entries(cacheHeaders)) {
       if (value != null) response.headers.set(key, value);
     }
   }
+
   return response;
 };

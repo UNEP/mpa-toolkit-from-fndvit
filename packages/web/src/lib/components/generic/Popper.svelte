@@ -51,53 +51,37 @@
     z-index: $z-index.tooltip;
     visibility: hidden;
     position: absolute;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
     max-width: 200px;
     text-align: center;
-
-    .arrow,
-    .arrow::before {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: inherit;
-    }
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
 
     .arrow {
-      visibility: hidden;
+      position: absolute;
     }
 
-    .arrow::before {
-      visibility: visible;
+    .arrow:before {
       content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      background: white;
       transform: rotate(45deg);
     }
+
     &:global([data-popper-placement^='top']) > .arrow {
       bottom: -4px;
-      &:before {
-        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-      }
     }
 
     &:global([data-popper-placement^='bottom']) > .arrow {
       top: -4px;
-      &:before {
-        box-shadow: -1px -1px 2px rgba(0, 0, 0, 0.1);
-      }
     }
 
     &:global([data-popper-placement^='left']) > .arrow {
-      right: -8px;
-      &:before {
-        box-shadow: 1px -1px 2px rgba(0, 0, 0, 0.1);
-      }
+      right: -4px;
     }
 
     &:global([data-popper-placement^='right']) > .arrow {
-      left: -8px;
-      &:before {
-        box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.1);
-      }
+      left: -4px;
     }
   }
 

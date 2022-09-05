@@ -35,11 +35,6 @@
   };
 </script>
 
-<svelte:head>
-  <title>Login</title>
-  <meta name="robots" content="noindex, nofollow" />
-</svelte:head>
-
 <div use:loadAuth class="login-page">
   <h2>LOGIN</h2>
   <div bind:this={buttonEl} />

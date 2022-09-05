@@ -13,6 +13,7 @@ export type FormattingError = {
 type NodeRule = {
   blocks: NodeName[];
   name: string;
+  type?: 'error' | 'todo';
   msg: string;
   inline?: boolean;
   check: (node: Node, parent: Node) => { from: number; to: number }[] | boolean;
@@ -33,7 +34,7 @@ class FormattingPlugin extends Plugin<{ decorations: DecorationSet; problems: Fo
       }
     });
     Object.entries(options.rules).forEach(([name, rule]) =>
-      this.addNodeRule(name, rule.blocks, rule.inline, rule.msg, rule.check)
+      this.addNodeRule(name, rule.blocks, rule.type || 'error', rule.inline, rule.msg, rule.check)
     );
   }
 
@@ -43,7 +44,8 @@ class FormattingPlugin extends Plugin<{ decorations: DecorationSet; problems: Fo
       Decoration.inline(prob.from, prob.to, {
         class: 'problem',
         'data-hover-msg': prob.rule.msg,
-        'data-problem-name': prob.rule.name
+        'data-problem-name': prob.rule.name,
+        'data-problem-type': prob.rule.type
       })
     );
     return { decorations: DecorationSet.create(doc, decos), problems };
@@ -72,16 +74,17 @@ class FormattingPlugin extends Plugin<{ decorations: DecorationSet; problems: Fo
   addNodeRule(
     name: string,
     blocks: NodeName | NodeName[],
+    type: NodeRule['type'],
     inline: boolean,
     msg: NodeRule['msg'],
     check: NodeRule['check']
   ) {
     if (!Array.isArray(blocks)) {
-      this.addNodeRule(name, [blocks], inline, msg, check);
+      this.addNodeRule(name, [blocks], type, inline, msg, check);
     } else {
       blocks.forEach(nodeType => {
         this.rules[nodeType] = this.rules[nodeType] ?? [];
-        this.rules[nodeType].push({ name, blocks, msg, inline, check });
+        this.rules[nodeType].push({ name, type, blocks, msg, inline, check });
       });
     }
   }
@@ -109,6 +112,16 @@ export const formattingPlugin = new FormattingPlugin({
       check: node => {
         const m = /^ *● */.exec(node.textContent);
         return m ? [{ from: 0, to: m[0].length + 1 }] : false;
+      }
+    },
+    todo: {
+      blocks: ['paragraph', 'heading'],
+      type: 'todo',
+      inline: true,
+      msg: 'TODO item',
+      check: node => {
+        const matches = findAllMatches(node.textContent, /\*TODO.*?\*/g);
+        return matches ? matches.map(m => ({ from: m.index, to: m.index + m[0].length })) : false;
       }
     },
     'double-space': {

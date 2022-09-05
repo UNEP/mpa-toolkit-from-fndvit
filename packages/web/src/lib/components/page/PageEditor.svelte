@@ -255,6 +255,7 @@
 
   .top-controls {
     position: absolute;
+    z-index: 1;
     left: 0;
     right: 0;
     width: fit-content;
@@ -357,6 +358,9 @@
           content: ' ';
           display: inline-block;
         }
+      }
+      :global(.problem[data-problem-name="todo"]) {
+        background-color: #aaf;
       }
       :global(.problem-highlight) {
         // highlight this problem

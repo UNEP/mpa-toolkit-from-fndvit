@@ -6,7 +6,7 @@
   type K = $$Generic<string | number>;
   type T = $$Generic<{ [Key in K]: string | numeber }>;
   export let list: T[];
-  export let key: K;
+  export let key: K = undefined;
 
   const getKey = (item: T) => (key ? item[key] : item);
 
@@ -16,7 +16,9 @@
 
   type Handler = svelte.JSX.DragEventHandler<HTMLLIElement>;
 
-  const start: Handler = e => e.dataTransfer.setData('source', e.currentTarget.dataset.index);
+  let dragItemIndex: string;
+
+  const start: Handler = e => (dragItemIndex = e.currentTarget.dataset.index);
 
   const over: Handler = e => {
     let dragged = getDraggedParent(e.currentTarget);
@@ -30,13 +32,13 @@
 
   const drop: Handler = e => {
     isOver = false;
-    let dragged = getDraggedParent(e.currentTarget);
-    let from = e.dataTransfer.getData('source');
-    let to = dragged.index;
+    let to = getDraggedParent(e.currentTarget).index;
+    let from = dragItemIndex;
+    dragItemIndex = undefined;
     reorder({ from, to });
   };
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{ sort: T[] }>();
   const reorder = ({ from, to }) => {
     let newList = [...list];
     newList[from] = [newList[to], (newList[to] = newList[from])][0];

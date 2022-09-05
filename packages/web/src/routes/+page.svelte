@@ -16,10 +16,6 @@
   const tagsForContainer = tags.map<PageTag>(t => ({ tag: t, category: 'PRIMARY' }));
 </script>
 
-<svelte:head>
-  <title>MPA Toolkit</title>
-</svelte:head>
-
 <div class="landing-page">
   <div class="mpath-logo">
     <InlineSvgLink href="/" svg="MPATH" />

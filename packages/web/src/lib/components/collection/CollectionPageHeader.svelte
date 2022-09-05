@@ -34,6 +34,7 @@
 <style lang="stylus">
 
   .container {
+    position: relative;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

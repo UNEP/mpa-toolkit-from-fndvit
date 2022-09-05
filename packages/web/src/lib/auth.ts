@@ -19,7 +19,8 @@ const REQUIRED_ROLES: { [routeId: string]: Role | null } = {
   'cms/tags': 'CONTENT_MANAGER',
   'cms/users': 'CONTENT_MANAGER',
 
-  // API
+  'draft/[slug]': 'CONTENT_MANAGER',
+
   'api': null, // prettier-ignore
   'api/auth/google': null,
   'api/auth/logout': 'CONTENT_MANAGER',

@@ -41,12 +41,10 @@
   .editable-text {
     color: inherit;
     background-color: inherit;
-    --outline-color: #ffffff88;
-    --caret-color: white;
-    caret-color: var(--caret-color);
+    caret-color: var(--caret-color, white);
 
     &:focus {
-      outline: 2px solid var(--outline-color, #ffffff88);
+      outline: var(--outline-width, 2px) solid var(--outline-color, #ffffff88);
       border-radius: 4px;
       background-color: var(--ui-color-focus);
     }

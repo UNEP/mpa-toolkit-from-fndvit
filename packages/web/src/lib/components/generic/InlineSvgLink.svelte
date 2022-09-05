@@ -1,24 +1,15 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { InlineSvg } from '$lib/components/generic';
   import type * as svgs from '$lib/svg';
 
   export let href: string;
   export let svg: keyof typeof svgs;
   export let newTab = false;
-
-  const isExternal = (_href: string) => {
-    try {
-      const { hostname } = new URL(_href);
-      return hostname !== $page.url.hostname;
-    } catch (e) {
-      return false;
-    }
-  };
+  export let download: string = undefined;
 
   const props = {
-    rel: isExternal(href) ? 'external' : undefined,
-    target: newTab ? '_blank' : undefined
+    target: newTab ? '_blank' : undefined,
+    download
   };
 </script>
 

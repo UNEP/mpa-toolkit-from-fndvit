@@ -13,11 +13,15 @@
 
 <style lang="stylus">
   .block-h1 {
-    typography: h1-responsive;
+    typography: h2-responsive;
     margin: 2rem 0;
   }
   .block-h2 {
-    typography: h2-responsive;
+    typography: h3-responsive;
+    margin: 2rem 0;
+  }
+  .block-h3 {
+    typography: h4-graphic-responsive;
     margin: 2rem 0;
   }
 </style>

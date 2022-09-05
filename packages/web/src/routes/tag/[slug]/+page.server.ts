@@ -25,7 +25,12 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
   const id = !isNaN(slugId) ? slugId : await getTagIdBySlug(slug);
 
-  if (id == null) throw error(404, 'Page not found');
+  const throw404 = () => {
+    locals.cacheKeys.add('tags');
+    throw error(404, 'Page not found');
+  };
+
+  if (id == null) throw404();
 
   const tag = await db.prisma.tag.findUnique({
     where: { id },
@@ -38,7 +43,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     }
   });
 
-  if (!tag || tag.pageTags.length === 0) throw error(404, 'Page not found');
+  if (!tag) throw404();
 
   const pages = tag.pageTags.map(t => t.page);
 

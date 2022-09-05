@@ -1,20 +1,25 @@
 <script lang="ts">
   import type { EditorState } from 'prosemirror-state';
-  import { formattingPlugin } from '$lib/editor/formatting';
+  import { groupBy } from '@mpa/utils';
+  import { formattingPlugin, type FormattingError } from '$lib/editor/formatting';
   import Tooltip from '$lib/components/generic/Tooltip.svelte';
 
   export let editorState: EditorState;
 
   $: problems = formattingPlugin.getState(editorState).problems;
 
-  const scrollToNextProblem = () => {
-    const { el, top } = [...document.querySelectorAll('.problem')]
+  $: groupedProblems = groupBy(problems, p => p.rule.type);
+
+  const scrollToNextProblem = (type: FormattingError['rule']['type']) => {
+    const allEls = [...document.querySelectorAll(`.problem[data-problem-type="${type}"]`)]
       .map(el => ({
         el,
         top: el.getBoundingClientRect().top
       }))
-      .sort((a, b) => a.top - b.top)
-      .find(({ top }) => top > window.innerHeight / 3);
+      .sort((a, b) => a.top - b.top);
+
+    const { el, top } = allEls.find(({ top }) => top > window.innerHeight / 3) || allEls[0];
+
     if (el) {
       window.scrollTo({
         top: 20 + top + window.scrollY - window.innerHeight / 3,
@@ -24,17 +29,25 @@
   };
 </script>
 
-{#if problems?.length > 0}
-  <div class="formatting-errors tooltip-hover-el" on:click={scrollToNextProblem}>
-    <Tooltip text={`${problems.length} formatting errors`} />
+{#if groupedProblems.todo?.length > 0}
+  <div class="formatting-notifications tooltip-hover-el" on:click={() => scrollToNextProblem('todo')}>
+    <Tooltip text={`${groupedProblems.todo.length} todos`} />
+    <span class="format-todo-icon">notifications</span>
+    {groupedProblems.todo.length}
+  </div>
+{/if}
+
+{#if groupedProblems.error?.length > 0}
+  <div class="formatting-notifications tooltip-hover-el" on:click={() => scrollToNextProblem('error')}>
+    <Tooltip text={`${groupedProblems.error.length} formatting errors`} />
     <span>warning</span>
-    {problems.length}
+    {groupedProblems.error.length}
   </div>
 {/if}
 
 <style lang="stylus">
 
-  .formatting-errors {
+  .formatting-notifications {
     position: relative;
     cursor: pointer;
     typography: ui-small;
@@ -45,7 +58,13 @@
     padding: 0 10px;
     > span {
       font-family: "Material Icons";
-      color: #900;
+      color: #933;
+      font-size: 14px;
+    }
+
+    > .format-todo-icon {
+      color: #449;
+      font-size: 14px;
     }
 
     border: 1px solid transparent;

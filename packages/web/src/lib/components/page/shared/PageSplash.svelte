@@ -15,15 +15,15 @@
   $: fallbackImg = page.caseStudy ? caseStudyDefaultImage : chapterDefaultImage;
 </script>
 
-<div class="mpath-logo">
-  <InlineSvgLink href="/" svg="MPATH" />
-</div>
 <div
   class="splash"
   style="background-image: url({staticUrl(page.img) || fallbackImg});"
   use:fallbackBackgroundImage={fallbackImg}
   class:splash-cs={page.caseStudy}
 >
+  <div class="mpath-logo">
+    <InlineSvgLink href="/" svg="MPATH" />
+  </div>
   <h1>
     {#if page.caseStudy}
       <EditableText bind:value={page.caseStudy.name} {editable} placeholder="Project name" />
@@ -36,6 +36,7 @@
 <style lang="stylus">
 
   .splash {
+    position: relative;
     grid-config(page, splash);
     grid-template-rows: 1fr auto;
 

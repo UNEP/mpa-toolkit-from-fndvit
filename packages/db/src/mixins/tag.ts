@@ -1,10 +1,20 @@
 import { publishEvent } from '@mpa/events';
+import { Queries } from '..';
 import type { MpaDatabase } from '../db';
 import type { APIRequests } from '../types';
 import { validate } from '../validation';
 
 export const tagMixin = (db: MpaDatabase) => ({
   all: () => db.prisma.tag.findMany(),
+
+  searchBarTags: () =>
+    db.prisma.tag.findMany({
+      where: { type: 'TOPIC' },
+      ...Queries.tag,
+      orderBy: { pageTags: { _count: 'desc' } },
+      take: 10
+    }),
+
   update: async (id: number, tag: APIRequests.Tag) => {
     validate('tag', tag);
 

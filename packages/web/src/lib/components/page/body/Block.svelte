@@ -6,6 +6,7 @@
   import TextSlider from './TextSlider.svelte';
   import BulletList from './BulletList.svelte';
   import OrderedList from './OrderedList.svelte';
+  import DiagramComponent from './DiagramComponent.svelte';
 
   export let block: ContentBlock;
 
@@ -15,7 +16,8 @@
     cards: TextSlider,
     image: Image,
     bullet_list: BulletList,
-    ordered_list: OrderedList
+    ordered_list: OrderedList,
+    diagram: DiagramComponent
   };
 </script>
 

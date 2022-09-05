@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { PageTag, Tag } from '@mpa/db';
   import { afterUpdate } from 'svelte';
-  import MultiSelect, { type Option } from 'svelte-multiselect';
   import textFit from 'textfit';
   import { groupBy } from '@mpa/utils';
   import HelpPopup from './HelpPopup.svelte';
   import type { MenuElement } from '$lib/components/shared/CircleMenu.svelte';
   import { CircleMenu, TagContainer } from '$lib/components/shared';
+  import LifeCycleTagsSelector from '$lib/components/cms/LifeCycleTagsSelector.svelte';
 
-  export let allTags: Tag[] = null;
+  export let allTags: Tag[] = [];
   export let tags: PageTag[]; // binding (updated as tags are changed)
   export let editable = false;
 
@@ -35,27 +35,21 @@
   const MAX_PRIMARY_TAGS = 2;
   const MAX_SECONDARY_TAGS = 7;
 
-  type PageTagOption = PageTag & Option;
+  // Overview of the edit/binding functionality of this component:
+  // 1. split the input tags into their four groups (primary, secondary, topic, user)
+  // 2. pass each group into a tag selector component
+  // 3. reassemble the four groups of selected tags into a single array for output
 
-  // used internally to bind to multiselect & keep track of selected tags
-  const selectedTagOptions = groupBy(
-    tags.map<PageTagOption>(t => ({ value: t.tag.id, label: t.tag.value, tag: t.tag, category: t.category })),
-    t => (t.tag.type === 'STAGE' ? t.category : t.tag.type)
-  );
+  const allTagsGrouped = groupBy(allTags, tag => tag.type);
 
-  const allPageTagOptions =
-    editable && allTags.map<PageTagOption>(tag => ({ value: tag.id, label: tag.value, tag, category: 'PRIMARY' }));
-  const groupedOptions = editable && groupBy(allPageTagOptions, ({ tag }) => tag.type);
-
-  $: selectedStageTagIds = new Set([...tags.filter(({ tag }) => tag.type === 'STAGE').map(({ tag }) => tag.id)]);
-
-  $: availableStageOptions = editable && groupedOptions.STAGE.filter(({ tag }) => !selectedStageTagIds.has(tag.id));
-
-  $: if (editable) {
-    tags = Object.values(selectedTagOptions)
-      .flat()
-      .map(o => ({ tag: o.tag, category: o.category }));
-  }
+  const tagsGrouped = {
+    STAGE: {
+      PRIMARY: tags.filter(t => t.tag.type === 'STAGE' && t.category === 'PRIMARY').map(t => t.tag),
+      SECONDARY: tags.filter(t => t.tag.type === 'STAGE' && t.category === 'SECONDARY').map(t => t.tag)
+    },
+    TOPIC: tags.filter(t => t.tag.type === 'TOPIC').map(t => t.tag),
+    USER: tags.filter(t => t.tag.type === 'USER').map(t => t.tag)
+  };
 
   function sortAndGroupTags(_tags: typeof tags) {
     // sort primary tags to the top and sort by id so it's consistent
@@ -63,6 +57,18 @@
     const sortedTags = _tags.sort((a, b) => tagSortVal(a) - tagSortVal(b));
     return groupBy(sortedTags, t => t.tag.type);
   }
+
+  $: tags = [
+    ...tagsGrouped.STAGE?.PRIMARY?.map<PageTag>(tag => ({ tag, category: 'PRIMARY' })),
+    ...tagsGrouped.STAGE?.SECONDARY?.map<PageTag>(tag => ({ tag, category: 'SECONDARY' })),
+    ...tagsGrouped.TOPIC?.map<PageTag>(tag => ({ tag, category: 'PRIMARY' })),
+    ...tagsGrouped.USER?.map<PageTag>(tag => ({ tag, category: 'PRIMARY' }))
+  ];
+
+  $: selectedStageTagIds = {
+    PRIMARY: new Set(tagsGrouped.STAGE?.PRIMARY?.map(t => t.id)),
+    SECONDARY: new Set(tagsGrouped.STAGE?.SECONDARY?.map(t => t.id))
+  };
 
   $: renderTags = !editable && sortAndGroupTags(tags);
 
@@ -106,16 +112,18 @@
     <div class="tag-container">
       {#if editable}
         <div class="subtitle">Primary Tags</div>
-        <MultiSelect
-          bind:selected={selectedTagOptions.PRIMARY}
-          options={availableStageOptions}
-          maxSelect={MAX_PRIMARY_TAGS}
+        <LifeCycleTagsSelector
+          bind:tags={tagsGrouped.STAGE.PRIMARY}
+          availableTags={allTagsGrouped.STAGE}
+          hideTagIds={selectedStageTagIds.SECONDARY}
+          max={MAX_PRIMARY_TAGS}
         />
         <div class="subtitle">Secondary Tags</div>
-        <MultiSelect
-          bind:selected={selectedTagOptions.SECONDARY}
-          options={availableStageOptions.map(o => ({ ...o, category: 'SECONDARY' }))}
-          maxSelect={MAX_SECONDARY_TAGS}
+        <LifeCycleTagsSelector
+          bind:tags={tagsGrouped.STAGE.SECONDARY}
+          availableTags={allTagsGrouped.STAGE}
+          hideTagIds={selectedStageTagIds.PRIMARY}
+          max={MAX_SECONDARY_TAGS}
         />
       {:else}
         <TagContainer tags={renderTags.STAGE} bind:currentTagHovered />
@@ -123,10 +131,10 @@
     </div>
   </div>
   <div class="bottom-section">
-    <h5 class="title">What&apos;s this about</h5>
+    <h5 class="title">What's this about</h5>
     <div class="tag-container">
       {#if editable}
-        <MultiSelect bind:selected={selectedTagOptions.TOPIC} options={groupedOptions.TOPIC} />
+        <LifeCycleTagsSelector bind:tags={tagsGrouped.TOPIC} availableTags={allTagsGrouped.TOPIC} />
       {:else}
         <TagContainer tags={renderTags.TOPIC} />
       {/if}
@@ -134,7 +142,7 @@
     <h5 class="title">Good for ...</h5>
     <div class="tag-container">
       {#if editable}
-        <MultiSelect bind:selected={selectedTagOptions.USER} options={groupedOptions.USER} />
+        <LifeCycleTagsSelector bind:tags={tagsGrouped.USER} availableTags={allTagsGrouped.USER} />
       {:else}
         <TagContainer tags={renderTags.USER} />
       {/if}

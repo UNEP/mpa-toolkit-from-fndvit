@@ -31,9 +31,9 @@ const doesKeyExist = async (key: string): Promise<boolean> => {
     .catch(() => false);
 };
 
-export async function uploadImage(file: File): Promise<string> {
+export async function uploadAsset(file: File, dir = 'assets'): Promise<string> {
   const hash = await fileToHash(file);
-  const key = `img/${hash}.${mime.extension(file.type)}`;
+  const key = `${dir}/${hash}.${mime.extension(file.type)}`;
   if (await doesKeyExist(key)) {
     log.info(`File already exists: ${key}`);
   } else {
