@@ -18,16 +18,16 @@
 
     <div class="links">
       <div>
-        <a href="/cms" rel="external">Contact us</a>
+        <a href="/team" rel="external">Contact us</a>
         <a href="/cms" rel="external">Follow us</a>
       </div>
 
       <div>
-        <a href="/cms" rel="external">Partners</a>
-        <a href="/cms" rel="external">Team</a>
-        <a href="/cms" rel="external">Privacy policy</a>
-        <a href="/cms" rel="external">Terms of use</a>
-        <a href="/cms" rel="external">Sitemap</a>
+        <a href="/partners" rel="external">Partners</a>
+        <a href="/team" rel="external">Team</a>
+        <a href="/privacy-policy" rel="external">Privacy policy</a>
+        <a href="/terms-of-use" rel="external">Terms of use</a>
+        <a href="/sitemap" rel="external">Sitemap</a>
       </div>
     </div>
   </div>
