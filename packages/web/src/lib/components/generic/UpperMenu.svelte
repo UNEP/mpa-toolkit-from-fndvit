@@ -144,7 +144,7 @@
       position: absolute;
       top: 0px;
       right: 0px;
-      background: #F9F9F9;
+      background: $colors.neutral-bg;
       box-shadow: -5px 0px 15px 1px rgba(0, 0, 0, 0.25);
       padding: 3rem;
       padding-left: 1.5rem;
@@ -161,7 +161,7 @@
     .selected {
       color: #2A2A2A;
       typography: h4;
-      background-color: #F9F9F9;
+      background-color: $colors.neutral-bg;
       border-radius: none;
       box-shadow: none;
       text-shadow: none;
