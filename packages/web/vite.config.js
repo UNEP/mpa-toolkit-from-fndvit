@@ -1,5 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import svg from '@poppanator/sveltekit-svg';
+import { plugin as markdown } from 'vite-plugin-markdown';
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -45,7 +46,9 @@ const config = {
     svg({
       includePaths: ['./src/lib/svg/'],
       svgoOptions: false
-    })
+    }),
+
+    markdown({ mode: ['html', 'toc'] })
   ]
 };
 
