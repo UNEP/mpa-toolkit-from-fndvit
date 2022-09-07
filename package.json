@@ -36,5 +36,8 @@
     "tsup": "^5.12.9",
     "typescript": "^4.7.4",
     "vite-plugin-markdown": "^2.1.0"
+  },
+  "dependencies": {
+    "svelte-markdown": "^0.2.3"
   }
 }

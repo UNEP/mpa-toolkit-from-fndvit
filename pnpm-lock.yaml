@@ -17,9 +17,12 @@ importers:
       prisma: ^4.2.1
       rimraf: ^3.0.2
       svelte: ^3.49.0
+      svelte-markdown: ^0.2.3
       tsup: ^5.12.9
       typescript: ^4.7.4
       vite-plugin-markdown: ^2.1.0
+    dependencies:
+      svelte-markdown: 0.2.3_svelte@3.49.0
     devDependencies:
       '@mpa/cli': link:packages/cli
       '@typescript-eslint/eslint-plugin': 5.33.0_6wykfq3d32hapmjcnmi5tu72oq
@@ -1712,6 +1715,10 @@ packages:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
       '@types/node': 18.7.5
+    dev: false
+
+  /@types/marked/4.0.6:
+    resolution: {integrity: sha512-ITAVUzsnVbhy5afxhs4PPPbrv2hKVEDH5BhhaQNQlVG0UNu+9A18XSdYr53nBdHZ0ADEQLl+ciOjXbs7eHdiQQ==}
     dev: false
 
   /@types/mime-types/2.1.1:
@@ -4200,6 +4207,12 @@ packages:
       uc.micro: 1.0.6
     dev: true
 
+  /marked/4.1.0:
+    resolution: {integrity: sha512-+Z6KDjSPa6/723PQYyc1axYZpYYpDnECDaU6hkaf5gqBieBkMKYReL5hteF2QizhlMbgbo8umXl/clZ67+GlsA==}
+    engines: {node: '>= 12'}
+    hasBin: true
+    dev: false
+
   /mdn-data/2.0.14:
     resolution: {integrity: sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==}
 
@@ -5167,6 +5180,16 @@ packages:
     dependencies:
       svelte: 3.49.0
     dev: true
+
+  /svelte-markdown/0.2.3_svelte@3.49.0:
+    resolution: {integrity: sha512-2h680NzTXnAD0CXhxe3GeHl6W+ayG4iKQRl+BIDRw+R0mUE0OiNxP1Vt8Rn+aWevB/LBiBIPCAwvL+0BkG057A==}
+    peerDependencies:
+      svelte: ^3.0.0
+    dependencies:
+      '@types/marked': 4.0.6
+      marked: 4.1.0
+      svelte: 3.49.0
+    dev: false
 
   /svelte-modals/1.1.0:
     resolution: {integrity: sha512-AB2BIy13dQExj7l6h6Rrwqx36HgX5ffh3n+rhGy5+xRpgsHHcGZKH0JkjZdKxuAqNeN1bawupQ8Y8IYr/rCVXg==}
