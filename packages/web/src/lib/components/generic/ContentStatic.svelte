@@ -13,6 +13,7 @@ export let content: string;
 <style lang="stylus">
 
   .page-content {
+    background-color: #F9F9F9;
     grid-config(page, content);
     position: relative;
     min-height: 800px;
