@@ -3,14 +3,9 @@
   import Footer from "$lib/components/shared/Footer.svelte";
   import ContentStatic from "$lib/components/generic/ContentStatic.svelte";
 
-  export let data;
-
+  export let data: {lastUpdated: string, content: string};
 </script>
 
-<SplashStatic page="Privacy policy" subtitle="As of August 24, 2022"/>
-<ContentStatic />
+<SplashStatic page="Privacy policy" subtitle="As of {data.lastUpdated}"/>
+<ContentStatic content={data.content}/>
 <Footer/>
-
-<style lang="stylus">
-
-</style>
