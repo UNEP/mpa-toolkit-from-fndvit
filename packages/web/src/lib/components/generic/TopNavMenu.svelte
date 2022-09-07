@@ -99,8 +99,6 @@
     transform: translate3d(0, 0, 0);
   }
 
-//--------------------MEDIUM---------------------------
-
   +breakpoint(page, medium) {
 
     .options-container {
