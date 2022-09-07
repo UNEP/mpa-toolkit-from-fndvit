@@ -1,7 +1,7 @@
 <script lang="ts">
   import InlineSvgLink from "$lib/components/generic/InlineSvgLink.svelte";
   import staticSplash from '$lib/assets/static-splash.png';
-  import UpperMenu from "$lib/components/generic/UpperMenu.svelte";
+  import TopNavMenu from "$lib/components/generic/TopNavMenu.svelte";
 
   export let page: string;
   export let subtitle: string = null;
@@ -14,7 +14,7 @@
         <InlineSvgLink href="/" svg="MPATH_W" />
       </div>
       <div class="right-side">
-        <UpperMenu current={page}/>
+        <TopNavMenu current={page}/>
       </div>
     </div>
 
