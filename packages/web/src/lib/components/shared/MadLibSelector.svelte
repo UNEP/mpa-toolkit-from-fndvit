@@ -29,7 +29,7 @@
 
 <svelte:window on:keydown={handleKeyDown} />
 
-<div id="test1" class="madlib-selector">
+<span class="madlib-selector">
   <button
     class="selector-area"
     on:click={() => (listboxVisible = !listboxVisible)}
@@ -56,7 +56,7 @@
       {/each}
     </ul>
   {/if}
-</div>
+</span>
 
 <style lang="stylus">
 

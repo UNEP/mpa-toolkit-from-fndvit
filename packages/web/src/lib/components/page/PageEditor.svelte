@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { APIRequests, Author, Chapter, Page, PageTag, Tag } from '@mpa/db';
   import type { Unpacked } from '@mpa/utils';
-  import { createLookup } from '@mpa/utils';
+  import { createLookup, slugify } from '@mpa/utils';
   import clone from 'clone';
   import { openModal } from 'svelte-modals';
   import Editor from '../cms/editor/Editor.svelte';
@@ -10,7 +10,7 @@
   import ChapterHead from './chapter/ChapterHead.svelte';
   import LifeCycle from './shared/LifeCycle.svelte';
   import PageSplash from './shared/PageSplash.svelte';
-  import { compareDeep, slugify } from '$lib/utils';
+  import { compareDeep } from '$lib/utils';
   import { insertInTextArea, onHoverEl } from '$lib/helpers/utils';
   import { getPageTypeStr } from '$lib/helpers/content';
   import { Button, DeleteModal, IconButton, LoadingButton, Popper, Spinner, toaster } from '$lib/components/generic';

@@ -1,11 +1,11 @@
-import { beforeAll, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { validate } from '../validation';
 import tagValid from './testdata/tag.valid.json';
 import tagInvalid from './testdata/tag.invalid.json';
 import { schemaExpectInvalid } from './testutil';
 
 describe('Tag', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     validate.errors = undefined;
   });
 

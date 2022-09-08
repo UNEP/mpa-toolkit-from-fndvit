@@ -4,7 +4,7 @@ import fs from 'fs';
 import * as dotenv from 'dotenv';
 import type { Expand, Without } from '@mpa/utils';
 
-type Environment = 'dev' | 'staging' | 'prod';
+type Environment = 'test' | 'dev' | 'staging' | 'prod';
 
 type EnvConfig = { [key: string]: boolean };
 type ConfigToEnvRequired<C extends EnvConfig> = { [K in keyof C]: C[K] extends true ? string : never };

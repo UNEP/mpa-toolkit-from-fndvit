@@ -12,7 +12,9 @@
   ],
   "scripts": {
     "generate": "prisma generate",
-    "migrate": "dotenv -e ../../.env.local prisma migrate dev",
+    "migrate": "pnpm migrate:local && pnpm migrate:test",
+    "migrate:local": "dotenv -e ../../.env.local prisma migrate dev",
+    "migrate:test": "dotenv -e ../../.env.test prisma migrate dev",
     "nuke": "node dist/bin/nuke.js",
     "seedmigrate": "node dist/bin/migrate.js",
     "seed": "node dist/bin/seed.js",
@@ -21,7 +23,10 @@
     "prepare": "pnpm run build && prisma generate",
     "dev": "tsup --watch",
     "build": "tsup",
-    "clean": "rimraf ./dist"
+    "clean": "rimraf ./dist",
+
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
   },
   "dependencies": {
     "@mpa/env": "workspace:*",

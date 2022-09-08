@@ -17,7 +17,7 @@
     },
     '[slug]': {
       title: data.page ? getPageDisplayTitle(data.page) : '',
-      desc: data.page?.chapter?.summary || data.page?.caseStudy.name,
+      desc: data.page?.chapter?.summary || data.page?.caseStudy?.name || 'Untitled',
       type: 'Article',
       image: chapterDefaultImage
     },
@@ -80,6 +80,7 @@
   $: unindexedRoutes = {
     'cms': 'CMS', // prettier-ignore
     'cms/login': 'Login',
+    'cms/dump': 'CMS - Dump',
     'cms/pages': 'CMS - Pages',
     'cms/tags': 'CMS - Tags',
     'cms/users': 'CMS - Users',

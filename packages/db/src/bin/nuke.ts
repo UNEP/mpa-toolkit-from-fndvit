@@ -2,8 +2,7 @@ import chalk from 'chalk';
 import { MpaDatabase } from '../db';
 import { env } from '../env';
 import '../lib/cli';
-import { reset } from '../lib/reset';
-import { Seeder } from '../lib/seed';
+import { DevSeeder, reset } from '../lib';
 
 const log = console.log;
 
@@ -17,10 +16,10 @@ async function nuke(db: MpaDatabase) {
     process.exit(1);
   }
 
-  const seeder = new Seeder(db);
+  const seeder = new DevSeeder(db);
   log(chalk.green('Seeding database...'));
   try {
-    await seeder.seed(true);
+    await seeder.seed();
   } catch (e) {
     log(chalk.red('Error seeding database:'));
     log(e);

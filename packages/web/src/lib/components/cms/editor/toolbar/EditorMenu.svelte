@@ -11,14 +11,14 @@
   import HeadingBlockButton from './HeadingBlockButton.svelte';
   import { IconButton } from '$lib/components/generic';
   import { schema } from '$lib/editor/schema';
-  import { createEmptyDiagram } from '$lib/helpers/content';
+  import { createEmptyCard, createEmptyDiagram } from '$lib/helpers/content';
 
   export let editorState: EditorState;
 
   const view = getContext('editorView') as EditorView;
 
   const insertCards = () => {
-    const tr = editorState.tr.replaceSelectionWith(schema.nodes.cards.createAndFill());
+    const tr = editorState.tr.replaceSelectionWith(schema.nodes.cards.createAndFill(createEmptyCard()));
     view.dispatch(tr);
   };
 

@@ -33,7 +33,10 @@ const doesKeyExist = async (key: string): Promise<boolean> => {
 
 export async function uploadAsset(file: File, dir = 'assets'): Promise<string> {
   const hash = await fileToHash(file);
-  const key = `${dir}/${hash}.${mime.extension(file.type)}`;
+  const mimeExt = mime.extension(file.type);
+  const filenameHasExt = file.name.includes('.');
+  const ext = mimeExt === 'bin' && filenameHasExt ? file.name.split('.').pop() : mimeExt;
+  const key = `${dir}/${hash}.${ext}`;
   if (await doesKeyExist(key)) {
     log.info(`File already exists: ${key}`);
   } else {

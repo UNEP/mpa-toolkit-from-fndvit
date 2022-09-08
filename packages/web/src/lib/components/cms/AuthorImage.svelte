@@ -13,6 +13,7 @@
   src={staticUrl(author.img) || userNoProfileImage}
   use:fallbackImage={userNoProfileImage}
   alt={author.name}
+  style="background: #b0bec6;"
 />
 
 <style lang="stylus">

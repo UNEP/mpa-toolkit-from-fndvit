@@ -1,7 +1,7 @@
 import { Queries } from '@mpa/db';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { slugify } from '$lib/utils';
+import { slugify } from '@mpa/utils';
 import { db } from '$lib/db';
 
 async function getAuthorBySlug(slug: string) {

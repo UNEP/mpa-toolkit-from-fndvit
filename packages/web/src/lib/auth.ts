@@ -18,6 +18,7 @@ const REQUIRED_ROLES: { [routeId: string]: Role | null } = {
   'cms/pages/create/chapter': 'CONTENT_MANAGER',
   'cms/tags': 'CONTENT_MANAGER',
   'cms/users': 'CONTENT_MANAGER',
+  'cms/dump': 'ADMIN',
 
   'draft/[slug]': 'CONTENT_MANAGER',
 
@@ -31,7 +32,8 @@ const REQUIRED_ROLES: { [routeId: string]: Role | null } = {
   'api/pages/create': 'CONTENT_MANAGER',
   'api/tags/[id]': 'CONTENT_MANAGER',
   'api/tags/create': 'CONTENT_MANAGER',
-  'api/users/[id]': 'ADMIN'
+  'api/users/[id]': 'ADMIN',
+  'api/dump': 'ADMIN'
 };
 
 export async function getUserFromCookie(request: Request, setHeaders: RequestEvent['setHeaders']) {

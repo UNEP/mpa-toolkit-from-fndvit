@@ -1,5 +1,5 @@
-import type { ContentBlock, ContentDocument, Page, Section, DiagramData } from '@mpa/db';
-import { slugify } from '$lib/utils';
+import type { ContentBlock, ContentDocument, Page, Section, DiagramData, CardsBlock } from '@mpa/db';
+import { slugify } from '@mpa/utils';
 import { env } from '$env/dynamic/public';
 
 export const staticUrl = (path: string) => (path ? `${env.PUBLIC_UPLOAD_BASE_URL}${path}` : null);
@@ -88,6 +88,10 @@ export function createEmptyDiagram(): DiagramData {
     baselayer: { desktop: null, mobile: null },
     caption: { title: 'Caption', body: 'Description' }
   };
+}
+
+export function createEmptyCard(): CardsBlock['attrs'] {
+  return { style: 'default', cards: [{ heading: '', body: '' }] };
 }
 
 export function getSectionSize(section: Section): number {

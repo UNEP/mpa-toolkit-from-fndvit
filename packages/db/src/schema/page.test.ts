@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { ajv, validate } from '../validation';
 import pageValidChapter from './testdata/page.valid.chapter.json';
 import pageValidCaseStudy from './testdata/page.valid.casestudy.json';
@@ -10,7 +10,7 @@ import pageInvalidMilestones from './testdata/page.invalid.milestones.json';
 import { schemaExpectInvalid } from './testutil';
 
 describe('Page', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     validate.errors = undefined;
   });
 

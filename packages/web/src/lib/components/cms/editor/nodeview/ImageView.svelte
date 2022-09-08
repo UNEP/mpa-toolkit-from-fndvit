@@ -1,8 +1,10 @@
 <script lang="ts">
   import type { ImageBlock } from '@mpa/db';
   import type { SvelteNodeViewControls } from 'prosemirror-svelte-nodeview';
+  import imagePlaceholder from '$lib/assets/image-placeholder.svg';
   import { IconButton } from '$lib/components/generic';
   import { staticUrl } from '$lib/helpers/content';
+  import { fallbackImage } from '$lib/helpers/utils';
 
   export var attrs: ImageBlock['attrs'];
   export var controls: SvelteNodeViewControls;
@@ -19,7 +21,7 @@
     <IconButton icon="aspect_ratio" title="Wide" active={attrs.style === 'full'} on:click={toggleStyle} />
     <IconButton on:click={controls.delete} icon="delete" />
   </div>
-  <img src={staticUrl(attrs.src)} alt={attrs.alt} title={attrs.title} />
+  <img use:fallbackImage={imagePlaceholder} src={staticUrl(attrs.src)} alt={attrs.alt} title={attrs.title} />
 </div>
 
 <style lang="stylus">

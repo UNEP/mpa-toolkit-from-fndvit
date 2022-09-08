@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
+  import { slugify } from '@mpa/utils';
   import MadLibSelector from './MadLibSelector.svelte';
-  import { slugify } from '$lib/utils';
 
   const tagValue = {
     'an MPA planner': 'MPA planners',

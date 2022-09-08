@@ -34,6 +34,13 @@ export function range(start: number, end: number) {
   return Array.from({ length }, (_, i) => start + i * step);
 }
 
+export function slugify(text: string, maxLen = 40) {
+  return (text || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .slice(0, maxLen);
+}
+
 // ************************
 //     TypeScript util
 // ************************

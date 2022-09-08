@@ -15,5 +15,6 @@ export const env = getEnv({
   AWS_SNS_CONTENT_TOPIC: false,
   AWS_REGION: false,
   FASTLY_API_KEY: false,
-  FASTLY_SERVICE_ID: false
+  FASTLY_SERVICE_ID: false,
+  PUBLIC_DB_RESTORE: false
 });

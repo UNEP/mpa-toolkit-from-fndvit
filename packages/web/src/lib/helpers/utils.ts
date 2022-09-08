@@ -105,7 +105,13 @@ export const fallbackBackgroundImage = (node: HTMLElement, img: string) => {
 };
 
 export const fallbackImage = (node: HTMLImageElement, img: string) => {
-  addEventListenerOnce(node, 'error', () => (node.src = img));
+  node.addEventListener('error', () => {
+    if (node.src !== img) node.src = img;
+  });
+
+  if (node.complete && node.naturalWidth === 0) {
+    node.src = img;
+  }
 };
 
 export function insertInTextArea(text: string, el: HTMLInputElement) {
