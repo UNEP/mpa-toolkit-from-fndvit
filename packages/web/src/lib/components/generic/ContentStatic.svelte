@@ -36,4 +36,24 @@ export let content: string;
     typography: p-responsive;
   }
 
+  :global(img[alt="UNEP logo"]) {
+    max-width: 125px;
+  }
+
+  :global(img[alt="World Wildlife Foundation logo"]) {
+    max-width: 65px;
+  }
+
+  :global(img[alt="Italian Agency for Development Cooperation logo"]) {
+    max-width: 115px;
+  }
+
+  :global(img[alt="University of Queensland logo"]) {
+    max-width: 188px;
+  }
+
+  :global(img[alt="The Nature Conservancy logo"]) {
+    max-width: 188px;
+  }
+
 </style>
