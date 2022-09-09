@@ -4,15 +4,20 @@
   import chapterDefaultImage from '$lib/assets/chapter-default-image.jpg';
   import { TagContainer } from '$lib/components/shared';
   import { getPageDisplayTitle, staticUrl } from '$lib/helpers/content';
-  import { fallbackImage } from '$lib/helpers/utils';
+  import { fallbackBackgroundImage } from '$lib/helpers/utils';
+  import ReadStatus from '../shared/ReadStatus.svelte';
 
   export let page: Page.ContentCard;
 
   $: fallbackImg = page.chapter ? chapterDefaultImage : caseStudyDefaultImage;
+  $: read = Math.random() < 0.5; //debug
 </script>
 
 <a class="landing-carousel-card" href="/{page.slug}" class:case-study={!!page.caseStudy} tabindex="0" rel="external">
-  <img use:fallbackImage={fallbackImg} class="image" src={staticUrl(page.img) || fallbackImg} alt="preview" />
+
+  <div class="image" use:fallbackBackgroundImage={fallbackImg} style="background-image: url({staticUrl(page.img) || fallbackImg});">
+    <ReadStatus {read}/>
+  </div>
 
   <div class="preview-content">
     <div class="title">
@@ -139,6 +144,7 @@
     width: 766px;
     height: 344px;
     object-fit: cover;
+    background-size: cover;
   }
 
   @media(max-width: 1024px) {

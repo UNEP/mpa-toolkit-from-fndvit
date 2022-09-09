@@ -5,6 +5,7 @@
   import { TagContainer } from '$lib/components/shared';
   import { getPageDisplayTitle, staticUrl } from '$lib/helpers/content';
   import { fallbackBackgroundImage } from '$lib/helpers/utils';
+  import ReadStatus from '../shared/ReadStatus.svelte';
 
   export let page: Page.CollectionCard;
   export let tagType: TagType = 'TOPIC';
@@ -25,14 +26,18 @@
   $: fallbackImg = page.chapter ? chapterDefaultImage : caseStudyDefaultImage;
 
   $: tags = page.tags.filter(t => t.tag.type === tagType);
+
+  $: read = Math.random() < 0.5; //debug
+
 </script>
 
 <a class="collection-card" {href} rel="external" class:cms-card={cms}>
   <div
     class="image"
     style="background-image: url({staticUrl(page.img) || fallbackImg});"
-    use:fallbackBackgroundImage={fallbackImg}
-  />
+    use:fallbackBackgroundImage={fallbackImg}>
+    <ReadStatus {read}/>
+  </div>
   <div class="content">
     <h1 class="title">
       {#if page.highlights}
