@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { slugify } from '$lib/utils';
+  import { slugify } from '@mpa/utils';;
   export let current: string = "Privacy policy";
 
   const options: string[] = ["Partners", "Team", "Privacy policy", "Terms of use", "Sitemap"];
