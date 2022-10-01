@@ -2,24 +2,27 @@
   import type { Page } from '@mpa/db';
   import { TagContainer } from '$lib/components/shared';
   import { staticUrl } from '$lib/helpers/content';
-  import { fallbackImage } from '$lib/helpers/utils';
+  import { fallbackBackgroundImage } from '$lib/helpers/utils';
   import caseStudyDefaultImage from '$lib/assets/casestudy-default-image.jpg';
   import chapterDefaultImage from '$lib/assets/chapter-default-image.jpg';
+  import ReadStatus from '$lib/components/shared/ReadStatus.svelte';
 
   export let page: Page.ContentCard;
 
   const { slug, img, title, tags } = page;
   $: fallbackImg = page.chapter ? chapterDefaultImage : caseStudyDefaultImage;
+  $: read = Math.random() < 0; // TODO: replace with actual read status
 </script>
 
 <div class="content-carousel-card" tabindex="0">
   <a href={'/' + slug}>
-    <img
-      use:fallbackImage={fallbackImg}
-      src={staticUrl(img) || fallbackImg}
-      alt="interesting-chapters"
-      href={'/' + slug}
-    />
+    <div
+      class="img"
+      use:fallbackBackgroundImage={fallbackImg}
+      style="background-image: url({staticUrl(img) || fallbackImg});"
+    >
+      <ReadStatus {read} />
+    </div>
     <div class="title">{title}</div>
   </a>
 
@@ -39,7 +42,7 @@
     }
     a:hover {
       text-decoration: none;
-      img {
+      .img {
         filter: brightness(105%);
       }
       .title {
@@ -53,8 +56,10 @@
     max-width: 292px;
   }
 
-  img {
+  .img {
     width: 100%;
+    height: 155px;
+    background-size: cover;
   }
 
   .title {
