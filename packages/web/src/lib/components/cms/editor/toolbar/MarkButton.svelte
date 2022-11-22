@@ -10,9 +10,9 @@
   export let markType: MarkType;
   export let icon: string = null;
   export let text: string = null;
-  export let url: string = null;
+  export let attrs: Record<string, unknown> = null;
 
-  const toggle = toggleMark(markType, markType.name === 'link' ?  { href: url } : null);
+  $: toggle = toggleMark(markType, attrs ? { ...attrs } : null);
 
   const view = getContext('editorView') as EditorView;
 
@@ -27,8 +27,6 @@
   }
 
   $: active = markActive(editorState, markType);
-
 </script>
 
 <IconButton on:click={onClick} {icon} {text} {active} />
-
