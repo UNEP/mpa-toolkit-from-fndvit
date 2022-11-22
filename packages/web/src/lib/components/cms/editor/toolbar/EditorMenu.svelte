@@ -31,12 +31,17 @@
     const tr = editorState.tr.insertText('*TODO: *');
     view.dispatch(tr);
   };
+
+  let url: string;
+
 </script>
 
 <div class="menu-bar">
   <div class="left-section">
     <MarkButton {editorState} markType={schema.marks.strong} icon="format_bold" />
     <MarkButton {editorState} markType={schema.marks.em} icon="format_italic" />
+    <MarkButton {editorState} markType={schema.marks.link} icon="link" {url} />
+    <input type="text" bind:value={url}>
     <MenuSeperator />
     <HeadingBlockButton {editorState} />
     <BlockButton {editorState} nodeType={schema.nodes.paragraph} text="¶" />
