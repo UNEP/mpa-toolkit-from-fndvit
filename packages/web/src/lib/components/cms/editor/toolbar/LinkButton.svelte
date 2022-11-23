@@ -38,9 +38,13 @@
   }
 
   const onSubmit = () => { toggle(editorState, view.dispatch) };
-  const onBlur = () => { urlEditorVisible = false };
 
-  $: editorState.selection ? urlEditorVisible = false : {};
+  const hideUrlEditor = () => {
+    urlEditorVisible = false;
+    url = '';
+  }
+
+  $: editorState.selection ? hideUrlEditor() : {};
   $: active = markActive(editorState, markType);
   $: attrs = { href: url };
   $: toggle = toggleMark(markType, attrs ? { ...attrs } : null);
@@ -56,7 +60,7 @@
       type="url"
       placeholder="https://example.com"
       bind:value={url}
-      on:blur={onBlur}
+      on:blur={hideUrlEditor}
       transition:slide
     />
   </form>
