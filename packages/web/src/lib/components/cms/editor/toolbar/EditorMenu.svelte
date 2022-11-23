@@ -3,6 +3,7 @@
   import type { EditorView } from 'prosemirror-view';
   import { getContext } from 'svelte';
   import MarkButton from './MarkButton.svelte';
+  import LinkButton from './LinkButton.svelte';
   import MenuSeperator from './MenuSeperator.svelte';
   import BlockButton from './BlockButton.svelte';
   import ListControls from './ListControls.svelte';
@@ -39,8 +40,7 @@
   <div class="left-section">
     <MarkButton {editorState} markType={schema.marks.strong} icon="format_bold" />
     <MarkButton {editorState} markType={schema.marks.em} icon="format_italic" />
-    <MarkButton {editorState} markType={schema.marks.link} icon="link" attrs={{ href: url }} />
-    <input type="text" bind:value={url} />
+    <LinkButton {editorState} markType={schema.marks.link} icon="link" />
     <MenuSeperator />
     <HeadingBlockButton {editorState} />
     <BlockButton {editorState} nodeType={schema.nodes.paragraph} text="¶" />
