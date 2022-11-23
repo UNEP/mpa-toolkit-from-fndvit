@@ -33,7 +33,6 @@
     view.dispatch(tr);
   };
 
-  let url: string;
 </script>
 
 <div class="menu-bar">
