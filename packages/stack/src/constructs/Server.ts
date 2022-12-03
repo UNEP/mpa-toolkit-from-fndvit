@@ -1,8 +1,8 @@
 import { Construct } from 'constructs';
+import type { aws_lambda_nodejs as lambdanode } from 'aws-cdk-lib';
 import {
   aws_ec2 as ec2,
   aws_lambda as lambda,
-  aws_lambda_nodejs as lambdanode,
   aws_cloudfront as cloudfront,
   aws_secretsmanager as secretsmanager,
   Duration
@@ -22,64 +22,60 @@ export const SERVER_ENV_CONFIG = {
 export interface ServerProps {
   vpc: ec2.IVpc;
   appConfigLayer?: lambda.ILayerVersion;
-  prismaEngineLayer: lambda.ILayerVersion;
   env: ConfigToEnvClean<typeof SERVER_ENV_CONFIG>;
 }
 
+type LambdaReferences = {
+  fn: lambdanode.NodejsFunction;
+  alias: lambda.Alias;
+};
+
 export class Server extends Construct {
   lambdaSg: ec2.SecurityGroup;
-  lambda: lambdanode.NodejsFunction;
-  lambdaAlias: lambda.Alias;
+  lambdas: {
+    api: LambdaReferences;
+    cms: LambdaReferences;
+    rest: LambdaReferences;
+  };
   edgeFn: cloudfront.experimental.EdgeFunction;
 
   constructor(scope: Construct, id: string, props: ServerProps) {
     super(scope, id);
 
-    const { vpc, env, prismaEngineLayer } = props;
+    const { vpc, env } = props;
 
     this.lambdaSg = new ec2.SecurityGroup(this, 'LambdaSG', { vpc });
 
     const secret = new secretsmanager.Secret(this, 'JWTSecret');
 
-    this.lambda = new lambdanode.NodejsFunction(this, 'Lambda', {
-      tracing: lambda.Tracing.ACTIVE,
-      entry: getPath('./packages/web/.svelte-kit/server/index.js'),
-      memorySize: 256,
-      timeout: Duration.seconds(15),
-      vpc,
-      vpcSubnets: {
-        subnetType: ec2.SubnetType.PRIVATE_WITH_NAT
-      },
-      layers: [prismaEngineLayer],
-      runtime: lambda.Runtime.NODEJS_16_X,
-      securityGroups: [this.lambdaSg],
-      environment: {
-        ...env,
-        JWT_SECRET_KEY: secret.secretValue.toString() // TODO: move to appConfig
-      },
-      depsLockFilePath: getPath('./packages/web/.svelte-kit/server/pnpm-lock.yaml'),
-      projectRoot: getPath('./packages/web'),
-      bundling: {
-        nodeModules: ['sharp'],
-        inject: ['../../packages/stack/dist/lambda/shims.js'],
-        commandHooks: {
-          beforeInstall: () => [],
-          beforeBundling: () => [],
-          afterBundling: (i, o) => [`cp ${i}/../../packages/db/prisma/schema.prisma ${o}`]
+    const createNewServerFunction = (name: string) => {
+      const fn = new lambda.Function(this, `Lambda-${name}`, {
+        code: lambda.Code.fromAsset(getPath(`packages/web/.svelte-kit/lambda/${name}`)),
+        handler: 'index.handler',
+        tracing: lambda.Tracing.ACTIVE,
+        memorySize: 256,
+        timeout: Duration.seconds(15),
+        vpc,
+        vpcSubnets: {
+          subnetType: ec2.SubnetType.PRIVATE_WITH_NAT
+        },
+        runtime: lambda.Runtime.NODEJS_16_X,
+        securityGroups: [this.lambdaSg],
+        environment: {
+          ...env,
+          JWT_SECRET_KEY: secret.secretValue.toString() // TODO: move to appConfig
         }
-      }
-    });
+      });
+      const alias = fn.addAlias(name);
+      alias.addAutoScaling({ minCapacity: 1, maxCapacity: 50 }).scaleOnUtilization({ utilizationTarget: 0.5 });
+      return { fn, alias };
+    };
 
-    this.lambdaAlias = this.lambda.addAlias('live');
-
-    const as = this.lambdaAlias.addAutoScaling({
-      minCapacity: 2,
-      maxCapacity: 50
-    });
-
-    as.scaleOnUtilization({
-      utilizationTarget: 0.5
-    });
+    this.lambdas = {
+      api: createNewServerFunction('api'),
+      cms: createNewServerFunction('cms'),
+      rest: createNewServerFunction('rest')
+    };
 
     this.edgeFn = new cloudfront.experimental.EdgeFunction(this, 'EdgeRouter', {
       code: new lambda.AssetCode(getPath('./packages/web/.svelte-kit/router')),

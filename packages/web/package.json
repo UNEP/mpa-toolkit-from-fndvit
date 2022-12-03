@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "clean": "rimraf .svelte-kit",
+    "clean": "rimraf .svelte-kit .lambda",
     "build": "svelte-kit sync && vite build",
     "synth": "pnpm build",
     "check": "svelte-check --tsconfig ./tsconfig.json",

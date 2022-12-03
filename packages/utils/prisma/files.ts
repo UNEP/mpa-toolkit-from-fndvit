@@ -4,10 +4,10 @@ import fs from 'fs-extra';
 import { globby } from 'globby';
 import projectRoot from '../projectRoot';
 
-export async function copyPrismaEngineFiles(dest: string) {
+export async function copyPrismaEngineFiles(outdir: string, matchers: Record<string, RegExp>) {
   const cache = `${await projectRoot()}/node_modules/.cache/prisma@4.2.1`;
 
-  fs.mkdirpSync(dest);
+  fs.mkdirpSync(outdir);
 
   if (!fs.pathExistsSync(cache)) {
     fs.mkdirpSync(cache);
@@ -17,7 +17,13 @@ export async function copyPrismaEngineFiles(dest: string) {
   }
 
   const engineFiles = await globby(`${cache}/**/engines/*rhel*`);
-  engineFiles.forEach(file => shell.cp(file, dest));
+  engineFiles.forEach(file => {
+    const dir = Object.keys(matchers).find(key => matchers[key].test(file));
+    if (!dir) return;
+    const destPath = path.join(outdir, dir);
+    fs.mkdirpSync(destPath);
+    shell.cp(file, destPath);
+  });
 }
 
 export async function copyPrismaClientFiles(dest: string) {

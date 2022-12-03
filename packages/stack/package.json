@@ -19,7 +19,7 @@
     "build": "pnpm run build:stack && pnpm run build:lambda",
     "build:stack": "tsup --config tsup.config.stack.js",
     "build:lambda": "tsup --config tsup.config.lambda.js",
-    "dev": "tsup --watch",
+    "dev": "tsup --config tsup.config.stack.js --watch",
     "clean": "rimraf dist cdk.out",
     "synth-staging": "cdk synth --app ./dist/stack.js --require-approval never MPAth-staging"
   },
@@ -30,15 +30,21 @@
     "@mpa/migration-runner": "workspace:*",
     "@mpa/utils": "workspace:^1.0.0",
     "@types/aws-lambda": "^8.10.93",
+    "@types/shelljs": "^0.8.11",
     "aws-cdk-lib": "^2.50.0",
     "aws-xray-sdk-core": "^3.4.0",
     "constructs": "^10.0.87",
-    "got": "^12.3.1"
+    "globby": "^13.1.2",
+    "got": "^12.3.1",
+    "lodash": "^4.17.21",
+    "replace-in-file": "^6.3.5",
+    "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@mpa/db": "workspace:*",
     "@mpa/events": "workspace:*",
     "@sveltejs/kit": "1.0.0-next.561",
+    "@types/lodash": "^4.14.190",
     "@types/rimraf": "^3.0.2",
     "aws-cdk": "^2.50.0",
     "find-up": "^6.3.0",

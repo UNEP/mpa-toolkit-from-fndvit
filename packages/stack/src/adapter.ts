@@ -5,20 +5,27 @@ import { fileURLToPath } from 'url';
 import type { Adapter } from '@sveltejs/kit';
 import * as esbuild from 'esbuild';
 import { copyPrismaEngineFiles, copyPrismaClientFiles } from '@mpa/utils/prisma/files';
-import { findUp } from 'find-up';
-import * as yaml from 'yaml';
+import type { RouteDefinition } from '@sveltejs/kit/types/private';
+import replace from 'replace-in-file';
+import * as os from 'os';
+import shell from 'shelljs';
+import { globbySync as glob } from 'globby';
+import { getPath } from './util/dirs';
 
-const writeLockFile = async (outdir: string) => {
-  const lockfilePath = await findUp('pnpm-lock.yaml');
-  if (!lockfilePath) throw new Error('pnpm-lock.yaml not found');
-
-  const lockfile = yaml.parse(fs.readFileSync(lockfilePath, 'utf8'));
-  const relativePath = path.relative(path.dirname(lockfilePath), process.cwd());
-  const outputLockfile = {
-    ...lockfile,
-    importers: { '.': lockfile.importers[relativePath] }
-  };
-  fs.writeFileSync(path.join(outdir, 'pnpm-lock.yaml'), yaml.stringify(outputLockfile));
+const writeSharpBinaries = async (outDir: string) => {
+  const tmpDir = path.resolve(os.tmpdir(), 'sharp-binaries');
+  fs.mkdirSync(tmpDir, { recursive: true });
+  const version = shell.exec('pnpm -w list sharp -pl', { silent: true }).stdout.match(/sharp@(?<version>\d.*?)\//)
+    ?.groups?.version;
+  if (!version) throw new Error('Could not find sharp version');
+  shell.exec('SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux --libc=glibc sharp@' + version, {
+    cwd: tmpDir,
+    silent: true
+  });
+  const binary = glob('**/sharp-linux-x64.node', { cwd: tmpDir, absolute: true });
+  if (binary.length !== 1) throw new Error('Could not find sharp binary');
+  fs.mkdirSync(outDir, { recursive: true });
+  fs.copyFileSync(binary[0], path.join(outDir, 'sharp-linux-x64.node'));
 };
 
 export default function (): Adapter {
@@ -27,12 +34,12 @@ export default function (): Adapter {
     async adapt(builder) {
       const lambda = fileURLToPath(new URL('./lambda', import.meta.url).href);
       const server = builder.getBuildDirectory('server');
+      const lambdaOut = builder.getBuildDirectory('lambda');
       const client = builder.getBuildDirectory('client');
       const prismaClient = builder.getBuildDirectory('prisma-client');
       const prismaEngine = builder.getBuildDirectory('prisma-engine');
       const router = builder.getBuildDirectory('router');
       const tmp = builder.getBuildDirectory('tmp');
-      // const serverTest = builder.getBuildDirectory('server-test');
 
       builder.rimraf(server);
       builder.rimraf(tmp);
@@ -41,38 +48,85 @@ export default function (): Adapter {
       builder.mkdirp(router);
       builder.writeClient(client);
 
-      await copyPrismaEngineFiles(prismaEngine);
+      await builder.createEntries(route => {
+        const getId = (route: RouteDefinition) => {
+          if (route.id.startsWith('/api') || route.id === '/globe.svg') return 'api';
+          if (route.id.startsWith('/cms')) return 'cms';
+          return 'rest';
+        };
+        const id = getId(route);
+        return {
+          id,
+          filter: other => id === getId(other),
+          complete: entry => {
+            const tmpFnDir = path.join(tmp, 'lambda', id);
+            builder.mkdirp(tmpFnDir);
+            const relativePath = posix.relative(tmpFnDir, builder.getServerDirectory());
+
+            // write the lambda entrypoint
+            builder.copy(`${lambda}/server.js`, `${tmpFnDir}/index.js`, {
+              replace: {
+                SERVER: `${relativePath}/index.js`,
+                MANIFEST: './manifest.js'
+              }
+            });
+
+            // write the manifest
+            fs.writeFileSync(
+              `${tmpFnDir}/manifest.js`,
+              `export const manifest = ${entry.generateManifest({ relativePath })};\n\n`
+            );
+
+            const outDir = path.join(lambdaOut, id);
+            // build
+            esbuild.buildSync({
+              entryPoints: [`${tmpFnDir}/index.js`],
+              outfile: `${outDir}/index.js`,
+              format: 'cjs',
+              bundle: true,
+              target: 'node16',
+              platform: 'node',
+              minify: true,
+              external: ['aws-sdk']
+            });
+
+            builder.copy(getPath('packages/db/prisma/schema.prisma'), `${outDir}/schema.prisma`);
+
+            const results = replace.sync({
+              files: `${outDir}/index.js`,
+              from: '../build/Release/sharp-',
+              to: './sharp-'
+            });
+
+            if (results[0].hasChanged) writeSharpBinaries(outDir);
+          }
+        };
+      });
+
+      await copyPrismaEngineFiles(prismaEngine, {
+        query: /libquery_engine/,
+        other: /(migration|prisma-fmt|introspection)/
+      });
+
       await copyPrismaClientFiles(prismaClient);
 
-      const relativePath = posix.relative(server, builder.getServerDirectory());
+      const buildRouter = async () => {
+        builder.copy(`${lambda}/router.js`, `${tmp}/_router.js`, { replace: { STATIC: './static.js' } });
 
-      builder.copy(`${lambda}/server.js`, `${server}/index.js`, {
-        replace: {
-          SERVER: `${relativePath}/index.js`,
-          MANIFEST: './manifest.js'
-        }
-      });
+        const staticFiles = [...getAllFiles(builder.getClientDirectory()), ...builder.prerendered.paths];
 
-      await writeLockFile(server);
+        fs.writeFileSync(`${tmp}/static.js`, `export const staticFiles = new Set(${JSON.stringify(staticFiles)});\n`);
 
-      fs.writeFileSync(
-        `${server}/manifest.js`,
-        `export const manifest = ${builder.generateManifest({ relativePath })};\n\n`
-      );
+        esbuild.buildSync({
+          entryPoints: [`${tmp}/_router.js`],
+          outfile: `${router}/index.js`,
+          format: 'cjs',
+          bundle: true,
+          platform: 'node'
+        });
+      };
 
-      builder.copy(`${lambda}/router.js`, `${tmp}/_router.js`, { replace: { STATIC: './static.js' } });
-
-      const staticFiles = [...getAllFiles(builder.getClientDirectory()), ...builder.prerendered.paths];
-
-      fs.writeFileSync(`${tmp}/static.js`, `export const staticFiles = new Set(${JSON.stringify(staticFiles)});\n`);
-
-      esbuild.buildSync({
-        entryPoints: [`${tmp}/_router.js`],
-        outfile: `${router}/index.js`,
-        format: 'cjs',
-        bundle: true,
-        platform: 'node'
-      });
+      await buildRouter();
 
       builder.log.minor('Done.');
     }
