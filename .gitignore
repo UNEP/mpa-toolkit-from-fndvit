@@ -7,7 +7,8 @@ cdk.out
 .dumps
 .env
 .env.*
-!.env.local.base
+!.env.local.example
+!.env.base
 !.env.test
 .vscode/*
 !.vscode/extensions.json
