@@ -6,8 +6,8 @@ const opts = {
 };
 
 async function initDb() {
-  compose.upOne('db-test', { ...opts, commandOptions: ['--force-recreate'] });
-  compose.exec('db-test', 'bash /data/load.sh', opts);
+  await compose.upOne('db-test', { ...opts, commandOptions: ['--force-recreate'] });
+  await compose.exec('db-test', 'bash /data/load.sh', opts);
 }
 
 initDb()
