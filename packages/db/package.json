@@ -16,7 +16,7 @@
   "scripts": {
     "generate": "prisma generate",
     "migrate": "pnpm migrate:local && pnpm migrate:test",
-    "migrate:local": "dotenv -e ../../.env.local.base prisma migrate dev",
+    "migrate:local": "dotenv -e ../../.env.base prisma migrate dev",
     "migrate:test": "dotenv -e ../../.env.test prisma migrate dev",
     "docker:up": "docker-compose -p mpa up -d",
     "docker:down": "docker-compose -p mpa down",
