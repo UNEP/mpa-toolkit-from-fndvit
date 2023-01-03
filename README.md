@@ -2,27 +2,21 @@
 
 ## Requirements
 
-- Postgres
 - pnpm
+- Docker
 - AWS credentials setup ([docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html))
 
 ## Getting started
 
-1. Fill out `.env.local` file (see `.env.example` for keys)
+1. Fill out `.env.local` file (see `.env.local.example` for required keys)
 
-2. Install dependencies
-
-```
-pnpm i
-```
-
-3. Set up database
+2. Run setup script
 
 ```
-pnpm migrate
+pnpm run setup
 ```
 
-4. Run dev server
+3. Run dev server
 
 ```
 pnpm dev
