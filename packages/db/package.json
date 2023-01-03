@@ -24,7 +24,7 @@
     "testdb:load": "esno ./test/db/up.ts",
     "test": "vitest --no-threads",
     "dev": "tsup --watch",
-    "build": "tsup",
+    "build": "prisma generate && tsup",
     "clean": "rimraf ./dist"
   },
   "dependencies": {
