@@ -16,13 +16,7 @@
   },
   "types": "src/index.ts",
   "scripts": {
-    "build": "pnpm build:stack && pnpm build:lambda && pnpm build:imageoptimizer",
-    "build:stack": "tsup --config tsup.config.stack.js",
-    "build:lambda": "tsup --config tsup.config.lambda.js",
-    "build:imageoptimizer": "./src/image-optimizer/build.sh",
-    "dev": "tsup --config tsup.config.stack.js --watch",
-    "clean": "rimraf dist cdk.out",
-    "synth": "FASTLY_API_KEY=1 FASTLY_SERVICE_ID=1 cdk synth --require-approval never MPAth-staging"
+    
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "2.17.0-alpha.0",
