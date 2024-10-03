@@ -9,6 +9,7 @@ export const load: PageServerLoad = async ({ locals: { cacheKeys } }) => {
   cacheKeys.add(`pages`);
   cacheKeys.add(`tags`);
   cacheKeys.add(`homepage`);
+  
 
   return {
     tags: tagsForSearch,

@@ -263,8 +263,6 @@
     .partners-grid-3 {
       grid-template-columns: 90px 100px 64px;
     }
-
-
     .top-searchbar {
       margin: 2rem 1rem;
 
@@ -278,7 +276,6 @@
         height: 20px;
       }
     }
-
     .mpath-logo {
       width: 80px;
       margin-left: 2rem;
