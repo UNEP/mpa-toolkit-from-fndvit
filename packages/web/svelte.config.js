@@ -19,7 +19,7 @@ const config = {
       dir: '../..'
     },
 	paths: {
-		base: process.env.PUBLIC_UPLOAD_BASE_URL || '',
+		base: '',
 		assets: process.env.ASSETS_BASE_URL || 'https://mpath.unenvironment.org'
 	}
   }
