@@ -89,7 +89,8 @@ jobs:
           aws-region: ${{ inputs.AWS_REGION }}
           
       - name: Deploy to S3
-        run: cd packages/stack && pnpm exec cdk deploy --app ./dist/stack.js --require-approval never MPAth-shared ${{ inputs.STACK_NAME }}
+        # run: cd packages/stack && pnpm exec cdk deploy --app ./dist/stack.js --require-approval never MPAth-shared ${{ inputs.STACK_NAME }}
+        run: cd packages/web/build/client && aws s3 cp . s3://${{ secrets.UPLOAD_BUCKET_NAME }}/_app/ --recursive --acl public-read
 
-      - name: Soft purge cache
-        run: 'curl -i  -X POST "https://api.fastly.com/service/${{ secrets.FASTLY_SERVICE_ID }}/purge/all" -H "Fastly-Key: ${{ secrets.FASTLY_API_KEY }}" -H "fastly-soft-purge: 1" -H "Accept: application/json"'
+      # - name: Soft purge cache
+      #   run: 'curl -i  -X POST "https://api.fastly.com/service/${{ secrets.FASTLY_SERVICE_ID }}/purge/all" -H "Fastly-Key: ${{ secrets.FASTLY_API_KEY }}" -H "fastly-soft-purge: 1" -H "Accept: application/json"'
