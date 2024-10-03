@@ -17,7 +17,11 @@ const config = {
     outDir: 'build',
     env: {
       dir: '../..'
-    }
+    },
+	paths: {
+		base: process.env.PUBLIC_UPLOAD_BASE_URL || '',
+		assets: process.env.ASSETS_BASE_URL || 'https://mpath.unenvironment.org'
+	}
   }
 };
 
